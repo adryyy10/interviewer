@@ -7,6 +7,8 @@ use App\Repository\QuestionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use function Symfony\Component\Clock\now;
+
 #[ApiResource()]
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
@@ -64,5 +66,10 @@ class Question
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->setCreatedAt(now());
     }
 }
