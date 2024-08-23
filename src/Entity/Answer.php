@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\AnswerRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation;
 
 #[ApiResource()]
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
@@ -17,9 +18,15 @@ class Answer
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Annotation\Groups([
+        'Question:V$List'
+    ])]
     private ?string $content = null;
 
     #[ORM\Column]
+    #[Annotation\Groups([
+        'Question:V$List'
+    ])]
     private ?bool $isCorrect = null;
 
     #[ORM\ManyToOne(inversedBy: 'answers')]

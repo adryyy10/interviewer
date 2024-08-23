@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class QuestionFixtures extends Fixture
 {
+    public const REF_PHP = 'QUESTION.REF_PHP';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -17,10 +18,10 @@ class QuestionFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $this->loadQuestion(
+        $this->addReference(self::REF_PHP,$this->loadQuestion(
             'Which is the latest PHP version?',
             'PHP',
-        );
+        ));
 
         $this->em->flush();
     }
@@ -28,13 +29,15 @@ class QuestionFixtures extends Fixture
     private function loadQuestion(
         string $content,
         string $category
-    ): void
+    ): Question
     {
         $question = new Question();
         $question->setContent($content);
         $question->setCategory($category);
 
         $this->em->persist($question);
+
+        return $question;
     }
 
 }

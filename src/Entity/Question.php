@@ -3,15 +3,27 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation;
 
 use function Symfony\Component\Clock\now;
 
-#[ApiResource()]
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            normalizationContext: [
+                'groups' => [
+                    'Question:V$List'
+                ]
+            ]
+        )
+    ]
+)]
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
 {
@@ -21,9 +33,15 @@ class Question
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Annotation\Groups([
+        'Question:V$List'
+    ])]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
+    #[Annotation\Groups([
+        'Question:V$List'
+    ])]
     private ?string $category = null;
 
     #[ORM\Column]
@@ -33,6 +51,9 @@ class Question
      * @var Collection<int, Answer>
      */
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question')]
+    #[Annotation\Groups([
+        'Question:V$List'
+    ])]
     private Collection $answers;
 
     public function getId(): ?int
