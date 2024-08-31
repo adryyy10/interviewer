@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -21,6 +22,13 @@ use function Symfony\Component\Clock\now;
                     'Question:V$List'
                 ]
             ]
+        ),
+        new Post(
+            denormalizationContext: [
+                'groups' => [
+                    'Question:W$Create'
+                ]
+            ]
         )
     ]
 )]
@@ -34,13 +42,15 @@ class Question
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
-        'Question:V$List'
+        'Question:V$List',
+        'Question:W$Create'
     ])]
     private ?string $content = null;
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
-        'Question:V$List'
+        'Question:V$List',
+        'Question:W$Create'
     ])]
     private ?string $category = null;
 
@@ -52,7 +62,8 @@ class Question
      */
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question')]
     #[Annotation\Groups([
-        'Question:V$List'
+        'Question:V$List',
+        'Question:W$Create'
     ])]
     private Collection $answers;
 
