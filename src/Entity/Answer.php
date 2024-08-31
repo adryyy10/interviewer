@@ -7,6 +7,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation;
 
+use function Symfony\Component\Clock\now;
+
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
 class Answer
 {
@@ -17,19 +19,22 @@ class Answer
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
-        'Question:V$List'
+        'Question:V$List',
+        'Question:W$Create'
     ])]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::BOOLEAN)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     #[Annotation\Groups([
-        'Question:V$List'
+        'Question:V$List',
+        'Question:W$Create'
     ])]
     private ?bool $isCorrect = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Annotation\Groups([
-        'Question:V$List'
+        'Question:V$List',
+        'Question:W$Create'
     ])]
     private ?string $explanation = null;
 
@@ -102,5 +107,10 @@ class Answer
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->setCreatedAt(now());
     }
 }
