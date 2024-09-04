@@ -24,7 +24,7 @@ class Answer
     ])]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
         'Question:V$List',
         'Question:W$Create'
