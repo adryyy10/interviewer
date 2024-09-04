@@ -38,24 +38,24 @@ class Question
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
         'Question:V$List',
         'Question:W$Create'
     ])]
-    private ?string $content = null;
+    private string $content;
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
         'Question:V$List',
         'Question:W$Create'
     ])]
-    private ?string $category = null;
+    private string $category;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     /**
      * @var Collection<int, Answer>
@@ -67,12 +67,12 @@ class Question
     ])]
     private Collection $answers;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -84,7 +84,7 @@ class Question
         return $this;
     }
 
-    public function getCategory(): ?string
+    public function getCategory(): string
     {
         return $this->category;
     }
@@ -96,7 +96,7 @@ class Question
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }

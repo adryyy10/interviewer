@@ -15,41 +15,41 @@ class Answer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
         'Question:V$List',
         'Question:W$Create'
     ])]
-    private ?string $content = null;
+    private string $content;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
         'Question:V$List',
         'Question:W$Create'
     ])]
-    private ?bool $isCorrect = null;
+    private bool $correct;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Annotation\Groups([
         'Question:V$List',
         'Question:W$Create'
     ])]
-    private ?string $explanation = null;
+    private string $explanation;
 
     #[ORM\ManyToOne(inversedBy: 'answers')]
     private ?Question $question = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getContent(): ?string
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -61,19 +61,19 @@ class Answer
         return $this;
     }
 
-    public function isCorrect(): ?bool
+    public function isCorrect(): bool
     {
-        return $this->isCorrect;
+        return $this->correct;
     }
 
-    public function setCorrect(bool $isCorrect): static
+    public function setCorrect(bool $correct): static
     {
-        $this->isCorrect = $isCorrect;
+        $this->correct = $correct;
 
         return $this;
     }
 
-    public function getExplanation(): ?string
+    public function getExplanation(): string
     {
         return $this->explanation;
     }
@@ -97,7 +97,7 @@ class Answer
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }

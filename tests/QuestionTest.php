@@ -36,17 +36,17 @@ class QuestionTest extends ApiTestCase
                 'answers' => [
                     [
                         'content' => 'Yes',
-                        'isCorrect' => false,
+                        'correct' => false,
                         'explanation' => 'Functions are key insensitive'
                     ],
                     [
                         'content' => 'No',
-                        'isCorrect' => false,
+                        'correct' => false,
                         'explanation' => 'Variables are key sensitive'
                     ],
                     [
                         'content' => 'Partially',
-                        'isCorrect' => true,
+                        'correct' => true,
                         'explanation' => 'Variables are key sensitive but functions and classes are key insensitive'
                     ]
                 ]

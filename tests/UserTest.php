@@ -16,7 +16,7 @@ class UserTest extends ApiTestCase
                 'name' => 'Adria',
                 'email' => 'adria@adria.com',
                 'password' => hash('md5', '1234'),
-                'isAdmin' => true,
+                'admin' => true,
             ]
         ]);
         $this->assertResponseStatusCodeSame(201);
@@ -32,7 +32,7 @@ class UserTest extends ApiTestCase
                 [
                     'name' => 'Adria',
                     'email' => 'adria@adria.com',
-                    'isAdmin' => true,
+                    'admin' => true,
                 ]
             ]
         ]);

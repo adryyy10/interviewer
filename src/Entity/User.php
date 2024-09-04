@@ -36,45 +36,45 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
         'User:V$List',
         'User:W$Create'
     ])]
-    private ?string $name = null;
+    private string $name;
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
         'User:V$List',
         'User:W$Create'
     ])]
-    private ?string $email = null;
+    private string $email;
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
         'User:V$List',
         'User:W$Create'
     ])]
-    private ?string $password = null;
+    private string $password;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
         'User:V$List',
         'User:W$Create'
     ])]
-    private ?bool $isAdmin = null;
+    private bool $admin;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -86,7 +86,7 @@ class User
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -98,7 +98,7 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -110,7 +110,7 @@ class User
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -122,14 +122,14 @@ class User
         return $this;
     }
 
-    public function isAdmin(): ?bool
+    public function isAdmin(): bool
     {
-        return $this->isAdmin;
+        return $this->admin;
     }
 
-    public function setAdmin(bool $isAdmin): static
+    public function setAdmin(bool $admin): static
     {
-        $this->isAdmin = $isAdmin;
+        $this->admin = $admin;
 
         return $this;
     }
