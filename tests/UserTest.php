@@ -6,6 +6,7 @@ use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 
 class UserTest extends ApiTestCase
 {
+
     public function testCreateGetCollection(): void
     {
         static::createClient()->request('POST', '/api/users', [
@@ -17,6 +18,7 @@ class UserTest extends ApiTestCase
                 'email' => 'adria@adria.com',
                 'password' => hash('md5', '1234'),
                 'admin' => true,
+                'roles' => ['ROLE_USER', 'ROLE_ADMIN']
             ]
         ]);
         $this->assertResponseStatusCodeSame(201);
@@ -33,6 +35,7 @@ class UserTest extends ApiTestCase
                     'name' => 'Adria',
                     'email' => 'adria@adria.com',
                     'admin' => true,
+                    'roles' => ['ROLE_USER', 'ROLE_ADMIN']
                 ]
             ]
         ]);
