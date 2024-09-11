@@ -68,7 +68,21 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "reset-dev-db": [
+            "bin/console app:db:assert-name interviewer_dev,interviewer_test",
+            "php -d memory_limit=1G bin/console cache:clear",
+            "bin/console doctrine:database:drop --force --if-exists",
+            "bin/console doctrine:database:create",
+            "bin/console doctrine:schema:up --force",
+            "@reset-dev-fixtures"
+        ],
+        "reset-test-db": "APP_ENV=test composer reset-dev-db",
+        "reset-dev-fixtures": [
+            "bin/console app:db:assert-name interviewer_dev,interviewer_test",
+            "bin/console doctrine:fixtures:load --no-interaction"
+        ],
+        "reset-test-fixtures": "APP_ENV=test composer reset-dev-fixtures"
     },
     "conflict": {
         "symfony/symfony": "*"

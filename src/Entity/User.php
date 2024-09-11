@@ -40,11 +40,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
-    private string $name;
+    private string $username;
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
     private string $email;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $apiKey = null;
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
@@ -66,14 +69,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id;
     }
 
-    public function getName(): string
+    public function getUsername(): string
     {
-        return $this->name;
+        return $this->username;
     }
 
-    public function setName(string $name): self
+    public function setUsername(string $username): self
     {
-        $this->name = $name;
+        $this->username = $username;
         return $this;
     }
 

@@ -2,13 +2,13 @@
 
 namespace App\Tests;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-
-class QuestionTest extends ApiTestCase
+class QuestionTest extends InterviewerTestCase
 {
     public function testListQuestions(): void
     {
-        static::createClient()->request('GET', '/api/questions');
+        $this->logInAsAdmin();
+
+        static::request('GET', '/api/questions');
         $this->assertResponseIsSuccessful();
 
         $this->assertJsonContains([
@@ -26,32 +26,59 @@ class QuestionTest extends ApiTestCase
 
     public function testCreateQuestion(): void
     {
-        static::createClient()->request('POST', '/api/questions', [
-            'headers' => [
-                'Content-Type' => 'application/ld+json',
-            ],
-            'json' => [
-                'content' => 'Is PHP case sensitive?',
-                'category' => 'PHP',
-                'answers' => [
-                    [
-                        'content' => 'Yes',
-                        'correct' => false,
-                        'explanation' => 'Functions are key insensitive'
-                    ],
-                    [
-                        'content' => 'No',
-                        'correct' => false,
-                        'explanation' => 'Variables are key sensitive'
-                    ],
-                    [
-                        'content' => 'Partially',
-                        'correct' => true,
-                        'explanation' => 'Variables are key sensitive but functions and classes are key insensitive'
-                    ]
+        $this->logInAsAdmin();
+
+        static::request('POST', '/api/questions', json: [
+            'content' => 'Is PHP case sensitive?',
+            'category' => 'PHP',
+            'answers' => [
+                [
+                    'content' => 'Yes',
+                    'correct' => false,
+                    'explanation' => 'Functions are case insensitive'
+                ],
+                [
+                    'content' => 'No',
+                    'correct' => false,
+                    'explanation' => 'Variables are case sensitive'
+                ],
+                [
+                    'content' => 'Partially',
+                    'correct' => true,
+                    'explanation' => 'Variables are case sensitive but functions and classes are case insensitive'
                 ]
             ]
+        ], headers: [
+            'Content-Type' => 'application/ld+json',
         ]);
         $this->assertResponseStatusCodeSame(201);
+    }
+
+    public function testCreateQuestionUnauthorised(): void
+    {
+        static::request('POST', '/api/questions', json: [
+            'content' => 'Is PHP case sensitive?',
+            'category' => 'PHP',
+            'answers' => [
+                [
+                    'content' => 'Yes',
+                    'correct' => false,
+                    'explanation' => 'Functions are case insensitive'
+                ],
+                [
+                    'content' => 'No',
+                    'correct' => false,
+                    'explanation' => 'Variables are case sensitive'
+                ],
+                [
+                    'content' => 'Partially',
+                    'correct' => true,
+                    'explanation' => 'Variables are case sensitive but functions and classes are case insensitive'
+                ]
+            ]
+        ], headers: [
+            'Content-Type' => 'application/ld+json',
+        ]);
+        $this->assertResponseStatusCodeSame(403);
     }
 }
