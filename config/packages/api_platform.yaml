@@ -1,3 +1,4 @@
+# api/config/packages/api_platform.yaml
 api_platform:
     title: Hello API Platform
     version: 1.0.0
