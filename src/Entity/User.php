@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation;
 use Doctrine\DBAL\Types\Types;
@@ -39,7 +41,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private int $id;
 
     #[ORM\Column(length: 255)]
-    #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
+    #[Annotation\Groups([
+        'Question:V$AdminList',
+        'User:V$List', 
+        'User:W$Create'
+    ])]
     private string $username;
 
     #[ORM\Column(length: 255)]
@@ -63,6 +69,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::JSON)]
     #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
     private array $roles = [];
+
+    /**
+     * @var Collection<int, Answer>
+     */
+    #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'createdBy', cascade: ['persist', 'remove'])]
+    private Collection $questions;
 
     public function getId(): int
     {
@@ -166,5 +178,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->setCreatedAt(now());
         $this->roles = ['ROLE_USER'];
+        $this->questions = new ArrayCollection();
     }
 }

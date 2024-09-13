@@ -24,13 +24,13 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $user = $this->loadUser(
+        $this->addReference(self::REF_ADMIN_ADRI, $this->loadUser(
             username: 'adri',
             email: 'adria@test.com',
             password: '1234',
             isAdmin: true,
             apikey: 'thisisatestkey',
-        );
+        ));
 
         $this->em->flush();
     }

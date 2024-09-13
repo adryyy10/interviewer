@@ -23,6 +23,14 @@ use function Symfony\Component\Clock\now;
                 ]
             ]
         ),
+        new GetCollection(
+            uriTemplate: '/admin/questions',
+            normalizationContext: [
+                'groups' => [
+                    'Question:V$AdminList'
+                ]
+            ]
+        ),
         new Post(
             denormalizationContext: [
                 'groups' => [
@@ -38,10 +46,14 @@ class Question
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Annotation\Groups([
+        'Question:V$AdminList',
+    ])]
     private int $id;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
+        'Question:V$AdminList',
         'Question:V$List',
         'Question:W$Create'
     ])]
@@ -49,10 +61,17 @@ class Question
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
+        'Question:V$AdminList',
         'Question:V$List',
         'Question:W$Create'
     ])]
     private string $category;
+
+    #[ORM\ManyToOne(inversedBy: 'questions')]
+    #[Annotation\Groups([
+        'Question:V$AdminList',
+    ])]
+    private User $createdBy;
 
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
@@ -104,6 +123,18 @@ class Question
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBY(User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }
