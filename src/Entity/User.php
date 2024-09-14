@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
@@ -26,6 +27,10 @@ use function Symfony\Component\Clock\now;
             normalizationContext: [
                 'groups' => ['User:V$List']
             ]
+        ),
+        new Get(
+            uriTemplate: '/admin/users/{id}',
+            security: "is_granted('ROLE_ADMIN')",
         ),
         new Post(
             denormalizationContext: [

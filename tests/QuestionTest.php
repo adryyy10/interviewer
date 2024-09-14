@@ -138,6 +138,24 @@ class QuestionTest extends InterviewerTestCase
         ]);
     }
 
+    public function testGetQuestion(): void
+    {
+        $question = $this->findQuestionByContent('Which is the latest PHP version?');
+
+        // No login -> 403
+        static::request('GET', "/api/admin/questions/{$question->getId()}");
+        $this->assertResponseStatusCodeSame(403);
+
+        // Logged as regular user -> 403
+        $this->logInAsAdminRegularUser();
+        static::request('GET', "/api/admin/questions/{$question->getId()}");
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->logInAsAdmin();
+        static::request('GET', "/api/admin/questions/{$question->getId()}");
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testDeleteQuestion(): void
     {
         $question = $this->findQuestionByContent('Which is the latest PHP version?');

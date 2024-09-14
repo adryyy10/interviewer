@@ -67,6 +67,25 @@ class UserTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(201);
     }
 
+    public function testGetUser(): void
+    {
+        $user = $this->getEm()->getRepository(User::class)->find(1);
+        Assert::isInstanceOf($user, User::class);
+
+        // No login -> 403
+        static::request('GET', "/api/admin/users/{$user->getId()}");
+        $this->assertResponseStatusCodeSame(403);
+
+        // Login as regular user -> 403
+        $this->logInAsAdminRegularUser();
+        static::request('GET', "/api/admin/users/{$user->getId()}");
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->logInAsAdmin();
+        static::request('GET', "/api/admin/users/{$user->getId()}");
+        $this->assertResponseIsSuccessful();
+    }
+
     public function testDeleteUser(): void
     {
         $user = $this->getEm()->getRepository(User::class)->find(1);
