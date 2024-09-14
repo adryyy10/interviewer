@@ -11,12 +11,13 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserFixtures extends Fixture
 {
     public const REF_ADMIN_ADRI = 'USER.REF_ADMIN_ADRI';
+    public const REF_REGULAR_USER = 'USER.REF_REGULAR_USER';
 
     private UserPasswordHasherInterface $passwordHasher;
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        UserPasswordHasherInterface $passwordHasher // Inject the password hasher
+        UserPasswordHasherInterface $passwordHasher
     )
     {
         $this->passwordHasher = $passwordHasher;
@@ -30,6 +31,14 @@ class UserFixtures extends Fixture
             password: '1234',
             isAdmin: true,
             apikey: 'thisisatestkey',
+        ));
+
+        $this->addReference(self::REF_REGULAR_USER, $this->loadUser(
+            username: 'regular',
+            email: 'regular.user@test.com',
+            password: '1234',
+            isAdmin: false,
+            apikey: 'thisisatestkey2',
         ));
 
         $this->em->flush();
@@ -51,6 +60,10 @@ class UserFixtures extends Fixture
 
         $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
         $user->setPassword($hashedPassword);
+
+        if ($isAdmin) {
+            $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        }
 
         $this->em->persist($user);
         return $user;

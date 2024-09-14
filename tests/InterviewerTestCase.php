@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use App\Entity\Question;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -42,6 +43,11 @@ class InterviewerTestCase extends ApiTestCase
     protected function logInAsAdmin(): void
     {
         $this->logIn('adria@test.com', '1234');
+    }
+
+    protected function logInAsAdminRegularUser(): void
+    {
+        $this->logIn('regular.user@test.com', '1234');
     }
 
     public function logOut(): void
@@ -94,5 +100,13 @@ class InterviewerTestCase extends ApiTestCase
         static::$myAuthToken = $res['apiKey'];
         static::$myEmail = $res['email'];
         static::$myId = $res['id'];
+    }
+
+    protected function findQuestionByContent(string $content): Question
+    {
+        $question = $this->getEm()->getRepository(Question::class)->findOneBy(['content' => $content]);
+        Assert::isInstanceOf($question, Question::class);
+
+        return $question;
     }
 }

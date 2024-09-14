@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\QuestionRepository;
@@ -24,6 +25,7 @@ use function Symfony\Component\Clock\now;
             ]
         ),
         new GetCollection(
+            security: "is_granted('ROLE_ADMIN')",
             uriTemplate: '/admin/questions',
             normalizationContext: [
                 'groups' => [
@@ -32,12 +34,18 @@ use function Symfony\Component\Clock\now;
             ]
         ),
         new Post(
+            security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: [
                 'groups' => [
                     'Question:W$Create'
                 ]
             ]
+        ),
+        new Delete(
+            uriTemplate: '/admin/questions/{id}',
+            security: "is_granted('ROLE_ADMIN')",
         )
+
     ]
 )]
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
