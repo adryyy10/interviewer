@@ -20,7 +20,7 @@ class InterviewerTestCase extends ApiTestCase
     {
         parent::setUp();
         static::bootKernel();
-        //$this->loadFixtures();
+        $this->resetDatabase();
     }
 
     #[\Override]
@@ -30,6 +30,12 @@ class InterviewerTestCase extends ApiTestCase
         static::$myEmail = null;
         static::$myId = null;
         parent::tearDown();
+    }
+
+    protected function resetDatabase(): void
+    {
+        $process = new Process(['sh', './reset_test_db.sh']);
+        $process->mustRun();
     }
 
 
@@ -73,16 +79,6 @@ class InterviewerTestCase extends ApiTestCase
         $response->getHeaders(throw: false);
 
         return $response;
-    }
-
-    private function loadFixtures(): void
-    {
-        $env = self::$kernel->getEnvironment();
-        $process = new Process(
-            ['composer', 'reset-test-fixtures', '--', "--env={$env}"],
-            self::$kernel->getProjectDir()
-        );
-        $process->mustRun();
     }
 
     private function logIn(string $email, string $password): void

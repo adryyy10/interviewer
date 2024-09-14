@@ -45,7 +45,6 @@ use function Symfony\Component\Clock\now;
             uriTemplate: '/admin/questions/{id}',
             security: "is_granted('ROLE_ADMIN')",
         )
-
     ]
 )]
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
