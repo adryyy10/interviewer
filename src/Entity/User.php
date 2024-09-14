@@ -21,6 +21,8 @@ use function Symfony\Component\Clock\now;
 #[ApiResource(
     operations: [
         new GetCollection(
+            security: "is_granted('ROLE_ADMIN')",
+            uriTemplate: "/admin/users",
             normalizationContext: [
                 'groups' => ['User:V$List']
             ]
@@ -30,7 +32,10 @@ use function Symfony\Component\Clock\now;
                 'groups' => ['User:W$Create']
             ]
         ),
-        new Delete(),
+        new Delete(
+            security: "is_granted('ROLE_ADMIN')",
+            uriTemplate: "/admin/users/{id}"
+        ),
     ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
