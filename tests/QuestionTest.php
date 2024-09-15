@@ -6,8 +6,7 @@ class QuestionTest extends InterviewerTestCase
 {
     public function testListQuestions(): void
     {
-        $this->logInAsAdminRegularUser();
-        static::request('GET', '/questions');
+        static::createClient()->request('GET', '/questions');
         $this->assertResponseIsSuccessful();
 
         $this->assertJsonContains([
