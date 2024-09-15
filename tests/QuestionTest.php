@@ -7,12 +7,12 @@ class QuestionTest extends InterviewerTestCase
     public function testListQuestions(): void
     {
         $this->logInAsAdminRegularUser();
-        static::request('GET', '/api/questions');
+        static::request('GET', '/questions');
         $this->assertResponseIsSuccessful();
 
         $this->assertJsonContains([
-            '@context' => '/api/contexts/Question',
-            '@id' => '/api/questions',
+            '@context' => '/contexts/Question',
+            '@id' => '/questions',
             '@type' => 'hydra:Collection',
             'hydra:member' => [
                 [
@@ -27,7 +27,7 @@ class QuestionTest extends InterviewerTestCase
     public function testCreateQuestion(): void
     {
         // No login -> 403
-        static::request('POST', '/api/questions', json: [
+        static::request('POST', '/questions', json: [
             'content' => 'Is PHP case sensitive?',
             'category' => 'PHP',
             'answers' => [
@@ -54,7 +54,7 @@ class QuestionTest extends InterviewerTestCase
 
         // Logged as regular user -> 403
         $this->logInAsAdminRegularUser();
-        static::request('POST', '/api/questions', json: [
+        static::request('POST', '/questions', json: [
             'content' => 'Is PHP case sensitive?',
             'category' => 'PHP',
             'answers' => [
@@ -80,7 +80,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('POST', '/api/questions', json: [
+        static::request('POST', '/questions', json: [
             'content' => 'Is PHP case sensitive?',
             'category' => 'PHP',
             'answers' => [
@@ -110,21 +110,21 @@ class QuestionTest extends InterviewerTestCase
     public function testListAdminQuestions(): void
     {
         // No login -> 403
-        static::request('GET', '/api/admin/questions');
+        static::request('GET', '/admin/questions');
         $this->assertResponseStatusCodeSame(403);
 
         // Logged as regular user -> 403
         $this->logInAsAdminRegularUser();
-        static::request('GET', '/api/admin/questions');
+        static::request('GET', '/admin/questions');
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('GET', '/api/admin/questions');
+        static::request('GET', '/admin/questions');
         $this->assertResponseIsSuccessful();
 
         $this->assertJsonContains([
-            '@context' => '/api/contexts/Question',
-            '@id' => '/api/admin/questions',
+            '@context' => '/contexts/Question',
+            '@id' => '/admin/questions',
             '@type' => 'hydra:Collection',
             'hydra:member' => [
                 [
@@ -143,16 +143,16 @@ class QuestionTest extends InterviewerTestCase
         $question = $this->findQuestionByContent('Which is the latest PHP version?');
 
         // No login -> 403
-        static::request('GET', "/api/admin/questions/{$question->getId()}");
+        static::request('GET', "/admin/questions/{$question->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
         // Logged as regular user -> 403
         $this->logInAsAdminRegularUser();
-        static::request('GET', "/api/admin/questions/{$question->getId()}");
+        static::request('GET', "/admin/questions/{$question->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('GET', "/api/admin/questions/{$question->getId()}");
+        static::request('GET', "/admin/questions/{$question->getId()}");
         $this->assertResponseIsSuccessful();
     }
 
@@ -161,16 +161,16 @@ class QuestionTest extends InterviewerTestCase
         $question = $this->findQuestionByContent('Which is the latest PHP version?');
 
         // No login -> 403
-        static::request('DELETE', "/api/admin/questions/{$question->getId()}");
+        static::request('DELETE', "/admin/questions/{$question->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
         // Logged as regular user -> 403
         $this->logInAsAdminRegularUser();
-        static::request('DELETE', "/api/admin/questions/{$question->getId()}");
+        static::request('DELETE', "/admin/questions/{$question->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('DELETE', "/api/admin/questions/{$question->getId()}");
+        static::request('DELETE', "/admin/questions/{$question->getId()}");
         $this->assertResponseIsSuccessful();
     }
 }

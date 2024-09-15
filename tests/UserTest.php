@@ -16,21 +16,21 @@ class UserTest extends InterviewerTestCase
     public function testGetUsers(): void
     {
         // No login -> 403
-        static::request('GET', '/api/admin/users');
+        static::request('GET', '/admin/users');
         $this->assertResponseStatusCodeSame(403);
 
         // Login as regular user -> 403
         $this->logInAsAdminRegularUser();
-        static::request('GET', '/api/admin/users');
+        static::request('GET', '/admin/users');
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('GET', '/api/admin/users');
+        static::request('GET', '/admin/users');
         $this->assertResponseIsSuccessful();
 
         $this->assertJsonContains([
-            '@context' => '/api/contexts/User',
-            '@id' => '/api/admin/users',
+            '@context' => '/contexts/User',
+            '@id' => '/admin/users',
             '@type' => 'hydra:Collection',
             'hydra:member' => [
                 [
@@ -52,7 +52,7 @@ class UserTest extends InterviewerTestCase
     public function testCreateGetCollection(): void
     {
         $this->loginAsAdmin();
-        static::request('POST', '/api/users',
+        static::request('POST', '/users',
             json: [
                 'username' => 'Adria',
                 'email' => 'adria@adria.com',
@@ -73,16 +73,16 @@ class UserTest extends InterviewerTestCase
         Assert::isInstanceOf($user, User::class);
 
         // No login -> 403
-        static::request('GET', "/api/admin/users/{$user->getId()}");
+        static::request('GET', "/admin/users/{$user->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
         // Login as regular user -> 403
         $this->logInAsAdminRegularUser();
-        static::request('GET', "/api/admin/users/{$user->getId()}");
+        static::request('GET', "/admin/users/{$user->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('GET', "/api/admin/users/{$user->getId()}");
+        static::request('GET', "/admin/users/{$user->getId()}");
         $this->assertResponseIsSuccessful();
     }
 
@@ -92,16 +92,16 @@ class UserTest extends InterviewerTestCase
         Assert::isInstanceOf($user, User::class);
 
         // No login -> 403
-        static::request('DELETE', "/api/admin/users/{$user->getId()}");
+        static::request('DELETE', "/admin/users/{$user->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
         // Login as regular user -> 403
         $this->logInAsAdminRegularUser();
-        static::request('DELETE', "/api/admin/users/{$user->getId()}");
+        static::request('DELETE', "/admin/users/{$user->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('DELETE', "/api/admin/users/{$user->getId()}");
+        static::request('DELETE', "/admin/users/{$user->getId()}");
         $this->assertResponseIsSuccessful();
     }
 }
