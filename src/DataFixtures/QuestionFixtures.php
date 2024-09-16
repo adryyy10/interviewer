@@ -36,12 +36,14 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
             'Which is the latest PHP version?',
             'PHP',
             $adminUser,
+            approved: true,
         ));
 
         $this->addReference(self::REF_PHP_STANDS,$this->loadQuestion(
             'What does PHP stand for?',
             'PHP',
             $adminUser,
+            approved: true,
         ));
 
         $this->em->flush();
@@ -51,12 +53,14 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
         string $content,
         string $category,
         User $createdBy,
+        bool $approved = false,
     ): Question
     {
         $question = new Question();
         $question->setContent($content);
         $question->setCategory($category);
         $question->setCreatedBY($createdBy);
+        $question->setApproved($approved);
 
         $this->em->persist($question);
 

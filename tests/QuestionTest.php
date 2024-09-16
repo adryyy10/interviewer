@@ -132,6 +132,7 @@ class QuestionTest extends InterviewerTestCase
                     'createdBy' => [
                         'username' => 'adri',
                     ],
+                    'approved' => true,
                 ]
             ]
         ]);

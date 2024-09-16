@@ -85,6 +85,13 @@ class Question
     ])]
     private User $createdBy;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    #[Annotation\Groups([
+        'Question:V$AdminList',
+        'Question:W$Create',
+    ])]
+    private bool $approved = false;
+
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
@@ -123,6 +130,18 @@ class Question
     public function setCategory(string $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function isApproved(): bool
+    {
+        return $this->approved;
+    }
+
+    public function setApproved(bool $approved): static
+    {
+        $this->approved = $approved;
 
         return $this;
     }
