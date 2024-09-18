@@ -37,14 +37,21 @@ use function Symfony\Component\Clock\now;
         new Get(
             uriTemplate: '/admin/questions/{id}',
             security: "is_granted('ROLE_ADMIN')",
+            normalizationContext: [
+                'groups' => [
+                    'Question:V$AdminDetail'
+                ]
+            ]
         ),
         new Post(
+            uriTemplate: '/admin/questions',
             security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: [
                 'groups' => [
                     'Question:W$Create'
-                ]
-            ]
+                ],
+                'disable_type_enforcement' => true
+            ],
         ),
         new Delete(
             uriTemplate: '/admin/questions/{id}',
@@ -59,12 +66,14 @@ class Question
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$AdminList',
     ])]
     private int $id;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
         'Question:W$Create'
@@ -73,6 +82,7 @@ class Question
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
         'Question:W$Create'
@@ -81,12 +91,14 @@ class Question
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$AdminList',
     ])]
     private User $createdBy;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:W$Create',
     ])]
@@ -134,6 +146,18 @@ class Question
         return $this;
     }
 
+    public function getCreatedBy(): User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
     public function isApproved(): bool
     {
         return $this->approved;
@@ -154,18 +178,6 @@ class Question
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getCreatedBy(): User
-    {
-        return $this->createdBy;
-    }
-
-    public function setCreatedBY(User $createdBy): static
-    {
-        $this->createdBy = $createdBy;
 
         return $this;
     }

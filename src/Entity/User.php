@@ -33,6 +33,7 @@ use function Symfony\Component\Clock\now;
             security: "is_granted('ROLE_ADMIN')",
         ),
         new Post(
+            uriTemplate: '/signup',
             denormalizationContext: [
                 'groups' => ['User:W$Create']
             ]
@@ -52,6 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$AdminList',
         'User:V$List', 
         'User:W$Create'
@@ -74,7 +76,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
-    private bool $admin;
+    private bool $admin = false;
 
     #[ORM\Column(type: Types::JSON)]
     #[Annotation\Groups(['User:V$List', 'User:W$Create'])]

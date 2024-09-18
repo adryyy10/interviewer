@@ -26,7 +26,7 @@ class QuestionTest extends InterviewerTestCase
     public function testCreateQuestion(): void
     {
         // No login -> 403
-        static::request('POST', '/questions', json: [
+        static::request('POST', '/admin/questions', json: [
             'content' => 'Is PHP case sensitive?',
             'category' => 'PHP',
             'answers' => [
@@ -53,7 +53,7 @@ class QuestionTest extends InterviewerTestCase
 
         // Logged as regular user -> 403
         $this->logInAsAdminRegularUser();
-        static::request('POST', '/questions', json: [
+        static::request('POST', '/admin/questions', json: [
             'content' => 'Is PHP case sensitive?',
             'category' => 'PHP',
             'answers' => [
@@ -79,7 +79,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('POST', '/questions', json: [
+        $res = static::request('POST', '/admin/questions', json: [
             'content' => 'Is PHP case sensitive?',
             'category' => 'PHP',
             'answers' => [
@@ -101,9 +101,22 @@ class QuestionTest extends InterviewerTestCase
             ]
         ], headers: [
             'Content-Type' => 'application/ld+json',
-        ]);
+        ])->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
+        $questionIri = $res['@id'];
+
+        $res = static::request('GET', $questionIri)->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            "content" => "Is PHP case sensitive?",
+            "category" => "PHP",
+            "createdBy" => [
+              "username" => "adri",
+            ],
+            "approved" => false,
+        ]);
+
     }
 
     public function testListAdminQuestions(): void

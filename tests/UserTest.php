@@ -52,7 +52,7 @@ class UserTest extends InterviewerTestCase
     public function testCreateGetCollection(): void
     {
         $this->loginAsAdmin();
-        static::request('POST', '/users',
+        static::request('POST', '/signup',
             json: [
                 'username' => 'Adria',
                 'email' => 'adria@adria.com',
