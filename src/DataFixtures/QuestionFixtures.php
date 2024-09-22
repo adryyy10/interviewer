@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Question;
 use App\Entity\User;
+use App\Enum\Category;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,21 +36,21 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 
         $this->addReference(self::REF_PHP_VERSION,$this->loadQuestion(
             'Which is the latest PHP version?',
-            'PHP',
+            Category::PHP,
             $adminUser,
             approved: true,
         ));
 
         $this->addReference(self::REF_PHP_STANDS,$this->loadQuestion(
             'What does PHP stand for?',
-            'PHP',
+            Category::PHP,
             $adminUser,
             approved: true,
         ));
 
         $this->addReference(self::REF_JS_VERSION,$this->loadQuestion(
             'Which ECMA version are we in?',
-            'JS',
+            Category::JS,
             $adminUser,
             approved: true,
         ));
@@ -59,7 +60,7 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 
     private function loadQuestion(
         string $content,
-        string $category,
+        Category $category,
         User $createdBy,
         bool $approved = false,
     ): Question

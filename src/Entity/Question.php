@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Enum\Category;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -93,7 +94,7 @@ class Question
         'Question:V$List',
         'Question:W$Create'
     ])]
-    private string $category;
+    private Category $category;
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
     #[Annotation\Groups([
@@ -142,10 +143,10 @@ class Question
 
     public function getCategory(): string
     {
-        return $this->category;
+        return $this->category->value;
     }
 
-    public function setCategory(string $category): static
+    public function setCategory(Category $category): static
     {
         $this->category = $category;
 
