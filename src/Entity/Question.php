@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -58,6 +60,10 @@ use function Symfony\Component\Clock\now;
             security: "is_granted('ROLE_ADMIN')",
         )
     ]
+)]
+#[ApiFilter(
+    SearchFilter::class, 
+    properties: ['category' => 'iexact']
 )]
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
