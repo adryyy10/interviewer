@@ -14,6 +14,7 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 {
     public const REF_PHP_VERSION = 'QUESTION.REF_PHP_VERSION';
     public const REF_PHP_STANDS = 'QUESTION.REF_PHP_STANDS';
+    public const REF_JS_VERSION = 'QUESTION.REF_JS_VERSION';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -42,6 +43,13 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
         $this->addReference(self::REF_PHP_STANDS,$this->loadQuestion(
             'What does PHP stand for?',
             'PHP',
+            $adminUser,
+            approved: true,
+        ));
+
+        $this->addReference(self::REF_JS_VERSION,$this->loadQuestion(
+            'Which ECMA version are we in?',
+            'JS',
             $adminUser,
             approved: true,
         ));

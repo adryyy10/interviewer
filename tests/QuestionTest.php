@@ -23,6 +23,25 @@ class QuestionTest extends InterviewerTestCase
         ]);
     }
 
+    public function testCategoryFilter(): void
+    {
+        static::createClient()->request('GET', '/questions?category=JS');
+        $this->assertResponseIsSuccessful();
+
+        $this->assertJsonContains([
+            '@context' => '/contexts/Question',
+            '@id' => '/questions',
+            '@type' => 'hydra:Collection',
+            'hydra:member' => [
+                [
+                    'content' => 'Which ECMA version are we in?',
+                    'category' => 'JS',
+                    'answers' => []
+                ]
+            ]
+        ]);
+    }
+
     public function testCreateQuestion(): void
     {
         // No login -> 403
