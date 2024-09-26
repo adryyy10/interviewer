@@ -51,7 +51,7 @@ class InterviewerTestCase extends ApiTestCase
         $this->logIn('adria@test.com', '1234');
     }
 
-    protected function logInAsAdminRegularUser(): void
+    protected function logInAsRegularUser(): void
     {
         $this->logIn('regular.user@test.com', '1234');
     }

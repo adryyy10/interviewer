@@ -88,6 +88,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'createdBy', cascade: ['persist', 'remove'])]
     private Collection $questions;
 
+    /**
+     * @var Collection<int, Questionnaire>
+     */
+    #[ORM\OneToMany(targetEntity: Questionnaire::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $questionnaires;
+
     public function getId(): int
     {
         return $this->id;
@@ -191,5 +197,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->setCreatedAt(now());
         $this->roles = ['ROLE_USER'];
         $this->questions = new ArrayCollection();
+        $this->questionnaires = new ArrayCollection();
     }
 }

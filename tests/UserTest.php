@@ -20,7 +20,7 @@ class UserTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         // Login as regular user -> 403
-        $this->logInAsAdminRegularUser();
+        $this->logInAsRegularUser();
         static::request('GET', '/admin/users');
         $this->assertResponseStatusCodeSame(403);
 
@@ -77,7 +77,7 @@ class UserTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         // Login as regular user -> 403
-        $this->logInAsAdminRegularUser();
+        $this->logInAsRegularUser();
         static::request('GET', "/admin/users/{$user->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
@@ -96,7 +96,7 @@ class UserTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         // Login as regular user -> 403
-        $this->logInAsAdminRegularUser();
+        $this->logInAsRegularUser();
         static::request('DELETE', "/admin/users/{$user->getId()}");
         $this->assertResponseStatusCodeSame(403);
 

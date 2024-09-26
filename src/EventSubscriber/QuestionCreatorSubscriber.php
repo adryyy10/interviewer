@@ -4,6 +4,7 @@ namespace App\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Question;
+use App\Entity\Questionnaire;
 use App\Entity\User;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -24,21 +25,28 @@ class QuestionCreationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::VIEW => ['setCreatedByOnQuestionCreation', EventPriorities::PRE_WRITE],
+            KernelEvents::VIEW => ['setCreator', EventPriorities::PRE_WRITE],
         ];
     }
 
-    public function setCreatedByOnQuestionCreation(ViewEvent $event): void
+    public function setCreator(ViewEvent $event): void
     {
-        $question = $event->getControllerResult();
+        $entity = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        // Only proceed if it's a Question object and a POST request
-        if ($question instanceof Question && $method === 'POST') {
-            $user = $this->security->getUser();
-            Assert::isInstanceOf($user, User::class);
+        if ($method !== 'POST') {
+            return;
+        }
 
-            $question->setCreatedBy($user);
+        $user = $this->security->getUser();
+        Assert::isInstanceOf($user, User::class);
+
+        if ($entity instanceof Question) {
+            $entity->setCreatedBy($user);
+        }
+
+        if ($entity instanceof Questionnaire) {
+            $entity->setUser($user);
         }
     }
 }
