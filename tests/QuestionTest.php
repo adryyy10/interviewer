@@ -6,40 +6,22 @@ class QuestionTest extends InterviewerTestCase
 {
     public function testListQuestions(): void
     {
-        static::createClient()->request('GET', '/questions');
+        $res = static::createClient()->request('GET', '/questions')->toArray();
         $this->assertResponseIsSuccessful();
+        $this->assertTrue($this->isInList($res, 'Which is the latest PHP version?'));
 
-        $this->assertJsonContains([
-            '@context' => '/contexts/Question',
-            '@id' => '/questions',
-            '@type' => 'hydra:Collection',
-            'hydra:member' => [
-                [
-                    'content' => 'Which is the latest PHP version?',
-                    'category' => 'PHP',
-                    'answers' => []
-                ]
-            ]
-        ]);
-    }
-
-    public function testCategoryFilter(): void
-    {
-        static::createClient()->request('GET', '/questions?category=JS');
+        // category filter
+        $res = static::createClient()->request('GET', '/questions?category=JS')->toArray();
         $this->assertResponseIsSuccessful();
+        $this->assertFalse($this->isInList($res, 'Which is the latest PHP version?'));
+        $this->assertTrue($this->isInList($res, 'Which ECMA version are we in?'));
 
-        $this->assertJsonContains([
-            '@context' => '/contexts/Question',
-            '@id' => '/questions',
-            '@type' => 'hydra:Collection',
-            'hydra:member' => [
-                [
-                    'content' => 'Which ECMA version are we in?',
-                    'category' => 'JS',
-                    'answers' => []
-                ]
-            ]
-        ]);
+        // approved filter
+        $res = static::createClient()->request('GET', '/questions?approved=true')->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertTrue($this->isInList($res, 'Which ECMA version are we in?'));
+        $this->assertFalse($this->isInList($res, 'Is CircleCI useful for monitorising?'));
+
     }
 
     public function testCreateQuestion(): void
@@ -74,7 +56,7 @@ class QuestionTest extends InterviewerTestCase
         $this->logInAsAdminRegularUser();
         static::request('POST', '/admin/questions', json: [
             'content' => 'Is PHP case sensitive?',
-            'category' => 'PHP',
+            'category' => 'php',
             'answers' => [
                 [
                     'content' => 'Yes',
@@ -100,7 +82,7 @@ class QuestionTest extends InterviewerTestCase
         $this->logInAsAdmin();
         $res = static::request('POST', '/admin/questions', json: [
             'content' => 'Is PHP case sensitive?',
-            'category' => 'PHP',
+            'category' => 'php',
             'answers' => [
                 [
                     'content' => 'Yes',
@@ -129,7 +111,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
             "content" => "Is PHP case sensitive?",
-            "category" => "PHP",
+            "category" => "php",
             "createdBy" => [
               "username" => "adri",
             ],
@@ -160,7 +142,7 @@ class QuestionTest extends InterviewerTestCase
             'hydra:member' => [
                 [
                     'content' => 'Which is the latest PHP version?',
-                    'category' => 'PHP',
+                    'category' => 'php',
                     'createdBy' => [
                         'username' => 'adri',
                     ],
@@ -204,5 +186,15 @@ class QuestionTest extends InterviewerTestCase
         $this->logInAsAdmin();
         static::request('DELETE', "/admin/questions/{$question->getId()}");
         $this->assertResponseIsSuccessful();
+    }
+
+    private function isInList(array $response, string $questionContent): bool
+    {
+        foreach($response['hydra:member'] as $question) {
+            if ($question['content'] === $questionContent) {
+                return true;
+            }
+        }
+        return false;
     }
 }

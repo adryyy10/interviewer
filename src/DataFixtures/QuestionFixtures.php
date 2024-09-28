@@ -16,6 +16,7 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
     public const REF_PHP_VERSION = 'QUESTION.REF_PHP_VERSION';
     public const REF_PHP_STANDS = 'QUESTION.REF_PHP_STANDS';
     public const REF_JS_VERSION = 'QUESTION.REF_JS_VERSION';
+    public const REF_NON_APPROVED = 'QUESTION.REF_NON_APPROVED';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -53,6 +54,13 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
             Category::JS,
             $adminUser,
             approved: true,
+        ));
+
+        $this->addReference(self::REF_NON_APPROVED,$this->loadQuestion(
+            'Is CircleCI useful for monitorising?',
+            Category::Devops,
+            $adminUser,
+            approved: false,
         ));
 
         $this->em->flush();
