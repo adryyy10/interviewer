@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use App\Interface\CreatableByUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\DBAL\Types\Types;
@@ -11,7 +13,7 @@ use Doctrine\DBAL\Types\Types;
 #[ApiResource(
     operations: [
         new Post(
-            security: 'user == object.user',
+            security: "is_granted('ROLE_USER')",
             denormalizationContext: [
                 'groups' => ['Questionnaire:W$Create']
             ]
@@ -19,7 +21,7 @@ use Doctrine\DBAL\Types\Types;
     ]
 )]
 
-class Questionnaire
+class Questionnaire implements CreatableByUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -35,7 +37,7 @@ class Questionnaire
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'questionnaires')]
     #[ORM\JoinColumn(nullable: false)]
-    private User $user;
+    private User $createdBy;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['Questionnaire:W$Create'])]
@@ -58,7 +60,7 @@ class Questionnaire
 
     public function setPunctuation(int $punctuation): self
     {
-        $this->punctuation = punctuation;
+        $this->punctuation = $punctuation;
         return $this;
     }
 
@@ -67,14 +69,14 @@ class Questionnaire
         return $this->createdAt;
     }
 
-    public function getUser(): User
+    public function getCreatedBy(): User
     {
-        return $this->user;
+        return $this->createdBy;
     }
 
-    public function setUser(User $user): self
+    public function setCreatedBy(User $createdBy): self
     {
-        $this->user = $user;
+        $this->createdBy = $createdBy;
         return $this;
     }
 

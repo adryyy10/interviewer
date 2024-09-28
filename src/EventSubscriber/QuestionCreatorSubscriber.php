@@ -6,6 +6,7 @@ use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Question;
 use App\Entity\Questionnaire;
 use App\Entity\User;
+use App\Interface\CreatableByUserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -41,12 +42,8 @@ class QuestionCreationSubscriber implements EventSubscriberInterface
         $user = $this->security->getUser();
         Assert::isInstanceOf($user, User::class);
 
-        if ($entity instanceof Question) {
+        if ($entity instanceof CreatableByUserInterface) {
             $entity->setCreatedBy($user);
-        }
-
-        if ($entity instanceof Questionnaire) {
-            $entity->setUser($user);
         }
     }
 }

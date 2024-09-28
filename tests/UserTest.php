@@ -88,7 +88,7 @@ class UserTest extends InterviewerTestCase
 
     public function testDeleteUser(): void
     {
-        $user = $this->getEm()->getRepository(User::class)->find(1);
+        $user = $this->getEm()->getRepository(User::class)->find(2);
         Assert::isInstanceOf($user, User::class);
 
         // No login -> 403

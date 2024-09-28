@@ -29,8 +29,8 @@ use function Symfony\Component\Clock\now;
             ]
         ),
         new Get(
-            uriTemplate: '/admin/users/{id}',
             security: "is_granted('ROLE_ADMIN')",
+            uriTemplate: '/admin/users/{id}',
         ),
         new Post(
             uriTemplate: '/signup',
@@ -91,7 +91,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Questionnaire>
      */
-    #[ORM\OneToMany(targetEntity: Questionnaire::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Questionnaire::class, mappedBy: 'createdBy', cascade: ['persist', 'remove'])]
     private Collection $questionnaires;
 
     public function getId(): int

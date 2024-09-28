@@ -21,7 +21,6 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseIsSuccessful();
         $this->assertTrue($this->isInList($res, 'Which ECMA version are we in?'));
         $this->assertFalse($this->isInList($res, 'Is CircleCI useful for monitorising?'));
-
     }
 
     public function testCreateQuestion(): void
