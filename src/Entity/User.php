@@ -29,8 +29,8 @@ use function Symfony\Component\Clock\now;
             ]
         ),
         new Get(
-            uriTemplate: '/admin/users/{id}',
             security: "is_granted('ROLE_ADMIN')",
+            uriTemplate: '/admin/users/{id}',
         ),
         new Post(
             uriTemplate: '/signup',
@@ -87,6 +87,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'createdBy', cascade: ['persist', 'remove'])]
     private Collection $questions;
+
+    /**
+     * @var Collection<int, Questionnaire>
+     */
+    #[ORM\OneToMany(targetEntity: Questionnaire::class, mappedBy: 'createdBy', cascade: ['persist', 'remove'])]
+    private Collection $questionnaires;
 
     public function getId(): int
     {
@@ -191,5 +197,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->setCreatedAt(now());
         $this->roles = ['ROLE_USER'];
         $this->questions = new ArrayCollection();
+        $this->questionnaires = new ArrayCollection();
     }
 }

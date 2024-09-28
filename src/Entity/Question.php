@@ -11,6 +11,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Enum\Category;
+use App\Interface\CreatableByUserInterface;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -66,7 +67,7 @@ use function Symfony\Component\Clock\now;
 #[ApiFilter(SearchFilter::class, properties: ['category' => 'iexact'])]
 #[ApiFilter(BooleanFilter::class, properties: ['approved'])]
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
-class Question
+class Question implements CreatableByUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

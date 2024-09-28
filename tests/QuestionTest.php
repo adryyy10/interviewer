@@ -21,7 +21,6 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseIsSuccessful();
         $this->assertTrue($this->isInList($res, 'Which ECMA version are we in?'));
         $this->assertFalse($this->isInList($res, 'Is CircleCI useful for monitorising?'));
-
     }
 
     public function testCreateQuestion(): void
@@ -53,7 +52,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         // Logged as regular user -> 403
-        $this->logInAsAdminRegularUser();
+        $this->logInAsRegularUser();
         static::request('POST', '/admin/questions', json: [
             'content' => 'Is PHP case sensitive?',
             'category' => 'php',
@@ -127,7 +126,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         // Logged as regular user -> 403
-        $this->logInAsAdminRegularUser();
+        $this->logInAsRegularUser();
         static::request('GET', '/admin/questions');
         $this->assertResponseStatusCodeSame(403);
 
@@ -161,7 +160,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         // Logged as regular user -> 403
-        $this->logInAsAdminRegularUser();
+        $this->logInAsRegularUser();
         static::request('GET', "/admin/questions/{$question->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
@@ -179,7 +178,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         // Logged as regular user -> 403
-        $this->logInAsAdminRegularUser();
+        $this->logInAsRegularUser();
         static::request('DELETE', "/admin/questions/{$question->getId()}");
         $this->assertResponseStatusCodeSame(403);
 
