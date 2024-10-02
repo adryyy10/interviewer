@@ -40,7 +40,7 @@ class AuthController extends Controller
             'email' => $user->getEmail(),
             'id' => $user->getId(),
             'firstName' => $user->getUsername(),
-            'staff' => $this->security->isGranted('ROLE_STAFF'),
+            'admin' => $this->security->isGranted('ROLE_ADMIN'),
         ]);
     }
 }
