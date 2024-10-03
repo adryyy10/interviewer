@@ -49,16 +49,13 @@ class UserTest extends InterviewerTestCase
         ]);
     }
 
-    public function testCreateGetCollection(): void
+    public function testCreate(): void
     {
-        $this->loginAsAdmin();
         static::request('POST', '/signup',
             json: [
                 'username' => 'Adria',
                 'email' => 'adria@adria.com',
-                'password' => hash('md5', '1234'),
-                'admin' => true,
-                'roles' => ['ROLE_USER', 'ROLE_ADMIN']
+                'password' => '1234',
             ],
             headers: [
                 'Content-Type' => 'application/ld+json',
