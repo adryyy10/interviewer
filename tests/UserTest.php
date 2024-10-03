@@ -55,7 +55,7 @@ class UserTest extends InterviewerTestCase
             json: [
                 'username' => 'Adria',
                 'email' => 'adria@adria.com',
-                'password' => hash('md5', '1234'),
+                'password' => '1234',
             ],
             headers: [
                 'Content-Type' => 'application/ld+json',

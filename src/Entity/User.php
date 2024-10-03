@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
+use App\State\UserCreateProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,6 +35,7 @@ use function Symfony\Component\Clock\now;
         ),
         new Post(
             uriTemplate: '/signup',
+            processor: UserCreateProcessor::class,
             denormalizationContext: [
                 'groups' => ['User:W$Create']
             ]
@@ -47,7 +49,7 @@ use function Symfony\Component\Clock\now;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column]
     private int $id;
 
