@@ -169,6 +169,28 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testUpdateQuestion(): void
+    {
+        $question = $this->findQuestionByContent('Which is the latest PHP version?');
+
+        $this->logInAsAdmin();
+        static::request('GET', "/admin/questions/{$question->getId()}");
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            "content" => "Which is the latest PHP version?",
+            "category" => "php",
+            "approved" => true,
+        ]);
+
+        static::request('PATCH', "/admin/questions/{$question->getId()}", ['approved' => false]);
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            "content" => "Which is the latest PHP version?",
+            "category" => "php",
+            "approved" => false,
+        ]);
+    }
+
     public function testDeleteQuestion(): void
     {
         $question = $this->findQuestionByContent('Which is the latest PHP version?');
