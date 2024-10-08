@@ -51,6 +51,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column]
+    #[Annotation\Groups([
+        'User:V$List',
+    ])]
     private int $id;
 
     #[ORM\Column(length: 255, unique: true)]

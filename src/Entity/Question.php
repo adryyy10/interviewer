@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Enum\Category;
 use App\Interface\CreatableByUserInterface;
@@ -48,6 +49,15 @@ use function Symfony\Component\Clock\now;
                 ]
             ]
         ),
+        new Patch(
+            uriTemplate: '/admin/questions/{id}',
+            security: "is_granted('ROLE_ADMIN')",
+            normalizationContext: [
+                'groups' => [
+                    'Question:W$Update'
+                ]
+            ]
+        ),
         new Post(
             uriTemplate: '/admin/questions',
             security: "is_granted('ROLE_ADMIN')",
@@ -83,7 +93,8 @@ class Question implements CreatableByUserInterface
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
-        'Question:W$Create'
+        'Question:W$Create',
+        'Question:W$Update',
     ])]
     private string $content;
 
@@ -92,7 +103,8 @@ class Question implements CreatableByUserInterface
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
-        'Question:W$Create'
+        'Question:W$Create',
+        'Question:W$Update',
     ])]
     private Category $category;
 
@@ -103,16 +115,27 @@ class Question implements CreatableByUserInterface
     ])]
     private User $createdBy;
 
+    #[ORM\ManyToOne(inversedBy: 'questions')]
+    #[Annotation\Groups([
+        'Question:V$AdminDetail',
+        'Question:V$AdminList',
+    ])]
+    private User $updatedBy;
+
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:W$Create',
+        'Question:W$Update',
     ])]
     private bool $approved = false;
 
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     /**
      * @var Collection<int, Answer>
@@ -161,6 +184,18 @@ class Question implements CreatableByUserInterface
     public function setCreatedBy(User $createdBy): static
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getUpdatedBy(): User
+    {
+        return $this->updatedBy;
+    }
+
+    public function setUpdatedBy(User $updatedBy): static
+    {
+        $this->updatedBy = $updatedBy;
 
         return $this;
     }
