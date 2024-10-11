@@ -182,12 +182,15 @@ class QuestionTest extends InterviewerTestCase
             "approved" => true,
         ]);
 
-        static::request('PATCH', "/admin/questions/{$question->getId()}", ['approved' => false]);
+        static::request('PATCH', "/admin/questions/{$question->getId()}", ['approved' => false, 'category' => 'js', 'content' => 'Which is the latest PHP version????']);
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
-            "content" => "Which is the latest PHP version?",
-            "category" => "php",
+            "content" => "Which is the latest PHP version????",
+            "category" => "js",
             "approved" => false,
+            "createdBy" => [
+                'username' => 'adri'
+            ]
         ]);
     }
 
