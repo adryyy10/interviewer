@@ -52,11 +52,16 @@ use function Symfony\Component\Clock\now;
         new Patch(
             uriTemplate: '/admin/questions/{id}',
             security: "is_granted('ROLE_ADMIN')",
-            normalizationContext: [
+            denormalizationContext: [
                 'groups' => [
                     'Question:W$Update'
                 ]
-            ]
+            ],
+            normalizationContext: [
+                'groups' => [
+                    'Question:V$AdminDetail'
+                ]
+            ],
         ),
         new Post(
             uriTemplate: '/admin/questions',
