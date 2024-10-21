@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use App\State\UserCreateProcessor;
@@ -32,6 +33,25 @@ use function Symfony\Component\Clock\now;
         new Get(
             security: "is_granted('ROLE_ADMIN')",
             uriTemplate: '/admin/users/{id}',
+            normalizationContext: [
+                'groups' => [
+                    'User:V$AdminDetail'
+                ]
+            ]
+        ),
+        new Patch(
+            uriTemplate: '/admin/users/{id}',
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: [
+                'groups' => [
+                    'User:W$Update'
+                ]
+            ],
+            normalizationContext: [
+                'groups' => [
+                    'User:V$AdminDetail'
+                ]
+            ],
         ),
         new Post(
             uriTemplate: '/signup',
@@ -60,13 +80,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Annotation\Groups([
         'Question:V$AdminDetail',
         'Question:V$AdminList',
+        'User:V$AdminDetail',
         'User:V$List', 
-        'User:W$Create'
+        'User:W$Create',
+        'User:W$Update',
     ])]
     private string $username;
 
     #[ORM\Column(length: 255)]
-    #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
+    #[Annotation\Groups([
+        'User:V$AdminDetail',
+        'User:V$List', 
+        'User:W$Create',
+        'User:W$Update',
+    ])]
     private string $email;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -80,11 +107,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
+    #[Annotation\Groups([
+        'User:V$AdminDetail',
+        'User:V$List', 
+        'User:W$Create',
+        'User:W$Update',
+    ])]
     private bool $admin = false;
 
     #[ORM\Column(type: Types::JSON)]
-    #[Annotation\Groups(['User:V$List', 'User:W$Create'])]
+    #[Annotation\Groups([
+        'User:V$List', 
+        'User:W$Create',
+    ])]
     private array $roles = [];
 
     /**

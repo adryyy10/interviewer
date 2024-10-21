@@ -64,6 +64,39 @@ class UserTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(201);
     }
 
+    public function testUpdateUser(): void
+    {
+        $user = $this->getEm()->getRepository(User::class)->find(1);
+        Assert::isInstanceOf($user, User::class);
+
+        $this->logInAsAdmin();
+        static::request('GET', "/admin/users/{$user->getId()}");
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            "username" => "adri",
+            "email" => "adria@test.com",
+            "admin" => true,
+        ]);
+        
+        static::request(
+            'PATCH', 
+            "/admin/users/{$user->getId()}", 
+            [
+                'username' => 'modifiedAdri', 
+                'email' => 'adriamodified@test.com', 
+                'admin' => false,
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+
+        static::request('GET', "/admin/users/{$user->getId()}");
+        $this->assertJsonContains([
+            "username" => "modifiedAdri",
+            "email" => "adriamodified@test.com",
+            "admin" => false,
+        ]);
+    }
+
     public function testGetUser(): void
     {
         $user = $this->getEm()->getRepository(User::class)->find(1);
