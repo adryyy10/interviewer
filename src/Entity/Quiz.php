@@ -15,13 +15,13 @@ use Doctrine\DBAL\Types\Types;
         new Post(
             security: "is_granted('ROLE_USER')",
             denormalizationContext: [
-                'groups' => ['Questionnaire:W$Create']
+                'groups' => ['Quiz:W$Create']
             ]
         ),
     ]
 )]
 
-class Questionnaire implements CreatableByUserInterface
+class Quiz implements CreatableByUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,18 +29,18 @@ class Questionnaire implements CreatableByUserInterface
     private int $id;
 
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups(['Questionnaire:W$Create'])]
+    #[Groups(['Quiz:W$Create'])]
     private int $punctuation;
 
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'questionnaires')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'quizzes')]
     #[ORM\JoinColumn(nullable: false)]
     private User $createdBy;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['Questionnaire:W$Create'])]
+    #[Groups(['Quiz:W$Create'])]
     private ?string $remarks = null;
 
     public function __construct()

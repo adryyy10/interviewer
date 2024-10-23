@@ -2,12 +2,12 @@
 
 namespace App\Tests;
 
-class QuestionnaireTest extends InterviewerTestCase
+class QuizTest extends InterviewerTestCase
 {
     public function testCreate(): void
     {
         // No login -> 403
-        static::request('POST', '/questionnaires',
+        static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 87,
             ],
@@ -18,14 +18,14 @@ class QuestionnaireTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsRegularUser();
-        static::request('POST', '/questionnaires',
+        static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 87,
             ],
             headers: [
                 'Content-Type' => 'application/ld+json',
             ],
-        );
+        )->toArray();
         $this->assertResponseStatusCodeSame(201);
     }
 }

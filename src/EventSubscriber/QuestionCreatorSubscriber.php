@@ -35,7 +35,7 @@ class QuestionCreationSubscriber implements EventSubscriberInterface
         $entity = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        // If we are creating a new user or method !== POST, return
+        // If method !== POST or we are creating a user, skip
         if ($method !== 'POST' || str_contains($event->getRequest()->getUri(), '/signup')) {
             return;
         }
