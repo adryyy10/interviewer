@@ -23,7 +23,7 @@ class UserFixtures extends Fixture
         $this->passwordHasher = $passwordHasher;
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $this->addReference(self::REF_ADMIN_ADRI, $this->loadUser(
             username: 'adri',
@@ -48,8 +48,8 @@ class UserFixtures extends Fixture
         string $username,
         string $email,
         string $password,
-        bool $isAdmin = false,
         string $apikey,
+        bool $isAdmin = false,
     ): User
     {
         $user = new User();

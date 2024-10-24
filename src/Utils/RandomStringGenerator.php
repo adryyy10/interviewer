@@ -4,12 +4,9 @@ namespace App\Utils;
 
 class RandomStringGenerator
 {
-    private $characters;
-
-    public function __construct($characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
-    {
-        $this->characters = $characters;
-    }
+    public function __construct(
+        private readonly string $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    {}
 
     public function generate(int $length = 16): string
     {
@@ -21,10 +18,5 @@ class RandomStringGenerator
         }
 
         return $randomString;
-    }
-
-    public function setCharacterPool(string $characters): void
-    {
-        $this->characters = $characters;
     }
 }

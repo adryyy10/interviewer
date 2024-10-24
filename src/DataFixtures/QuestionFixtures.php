@@ -30,7 +30,7 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $adminUser = $this->getReference(UserFixtures::REF_ADMIN_ADRI);
         Assert::isInstanceOf($adminUser, User::class);

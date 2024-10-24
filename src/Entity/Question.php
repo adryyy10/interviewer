@@ -229,6 +229,18 @@ class Question implements CreatableByUserInterface
         return $this;
     }
 
+    public function getUpdatedAt(): \DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
     public function __construct()
     {
         $this->setCreatedAt(now());

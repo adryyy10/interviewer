@@ -10,6 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @implements ProcessorInterface<User, User>
+ */
 class UserCreateProcessor implements ProcessorInterface
 {
     public function __construct(

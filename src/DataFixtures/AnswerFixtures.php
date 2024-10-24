@@ -27,7 +27,7 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
         ];
     }
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $phpQuestionVersion = $this->getReference(QuestionFixtures::REF_PHP_VERSION);
         Assert::isInstanceOf($phpQuestionVersion, Question::class);
