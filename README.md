@@ -23,7 +23,7 @@ $ ./reset_dev_db.sh
 ## Static analysis
 
 ```bash
-$ vendor/bin/phpstan analyse src tests
+$ vendor/bin/phpstan analyse
 ```
 
 ## Testing
