@@ -14,6 +14,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 /**
 * Tries sequentially the several ways we may want to be looking up a user.
 */
+/**
+ * @implements UserProviderInterface<User>
+ */
 final class InterviewerUserProvider implements UserProviderInterface
 {
     /** @var EntityManagerInterface */
@@ -24,7 +27,7 @@ final class InterviewerUserProvider implements UserProviderInterface
         $this->em = $em;
     }
 
-    public function loadUserByIdentifier($username): UserInterface
+    public function loadUserByIdentifier(string $username): UserInterface
     {
         $userRepo = $this->em->getRepository(User::class);
 
@@ -54,7 +57,7 @@ final class InterviewerUserProvider implements UserProviderInterface
         throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
     }
 
-    public function supportsClass($class): bool
+    public function supportsClass(string $class): bool
     {
         return User::class === $class;
     }

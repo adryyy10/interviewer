@@ -115,6 +115,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private bool $admin = false;
 
+    /**
+     * @var string[]
+     */
     #[ORM\Column(type: Types::JSON)]
     #[Annotation\Groups([
         'User:V$List', 
@@ -123,7 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
-     * @var Collection<int, Answer>
+     * @var Collection<int, Question>
      */
     #[ORM\OneToMany(targetEntity: Question::class, mappedBy: 'createdBy', cascade: ['persist', 'remove'])]
     private Collection $questions;
@@ -133,6 +136,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Quiz::class, mappedBy: 'createdBy', cascade: ['persist', 'remove'])]
     private Collection $quizzes;
+
+    public function __construct()
+    {
+        $this->setCreatedAt(now());
+        $this->roles = ['ROLE_USER'];
+        $this->questions = new ArrayCollection();
+        $this->quizzes = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -207,7 +218,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     *
+     * @return string
      * @see UserInterface
      */
     public function getUserIdentifier(): string
@@ -216,6 +227,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * @return string[]
      * @see UserInterface
      */
     public function getRoles(): array
@@ -226,17 +238,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param string[] $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
         return $this;
     }
 
-    public function __construct()
+    /**
+     * @return Collection<int, Question>
+     */
+    public function getQuestions(): Collection
     {
-        $this->setCreatedAt(now());
-        $this->roles = ['ROLE_USER'];
-        $this->questions = new ArrayCollection();
-        $this->quizzes = new ArrayCollection();
+        return $this->questions;
+    }
+
+    /**
+     * @return Collection<int, Quiz>
+     */
+    public function getQuizzes(): Collection
+    {
+        return $this->quizzes;
     }
 }

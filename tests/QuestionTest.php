@@ -212,6 +212,9 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /**
+     * @param array<string, mixed> $response
+     */
     private function isInList(array $response, string $questionContent): bool
     {
         foreach($response['hydra:member'] as $question) {

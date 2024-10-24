@@ -16,12 +16,9 @@ use Webmozart\Assert\Assert;
 
 class QuestionCreationSubscriber implements EventSubscriberInterface
 {
-    private $security;
-
-    public function __construct(Security $security)
-    {
-        $this->security = $security;
-    }
+    public function __construct(
+        private readonly Security $security)
+    {}
 
     public static function getSubscribedEvents()
     {

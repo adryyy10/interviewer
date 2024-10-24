@@ -20,6 +20,12 @@ $ symfony server:start
 $ ./reset_dev_db.sh
 ```
 
+## Static analysis
+
+```bash
+$ vendor/bin/phpstan analyse
+```
+
 ## Testing
 
 Setup:
