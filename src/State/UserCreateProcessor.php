@@ -19,13 +19,14 @@ class UserCreateProcessor implements ProcessorInterface
         private readonly EntityManagerInterface $em,
         private readonly RandomStringGenerator $randomStringGenerator,
         private readonly UserPasswordHasherInterface $passwordHasher,
-    ){}
+    ) {
+    }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): User
     {
         Assert::isInstanceOf($user = $data, User::class);
         $user->apiKey = $this->randomStringGenerator->generate(8);
-        
+
         $hashedPassword = $this->passwordHasher->hashPassword($user, $user->getPassword());
         $user->setPassword($hashedPassword);
 

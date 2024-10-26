@@ -26,6 +26,12 @@ $ ./reset_dev_db.sh
 $ vendor/bin/phpstan analyse
 ```
 
+## CS fixer
+
+```bash
+$ ./vendor/bin/php-cs-fixer fix src
+```
+
 ## Testing
 
 Setup:

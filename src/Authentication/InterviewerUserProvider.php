@@ -12,8 +12,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
-* Tries sequentially the several ways we may want to be looking up a user.
-*/
+ * Tries sequentially the several ways we may want to be looking up a user.
+ */
 /**
  * @implements UserProviderInterface<User>
  */

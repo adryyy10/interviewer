@@ -20,8 +20,8 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-    )
-    {}
+    ) {
+    }
 
     public function getDependencies()
     {
@@ -35,28 +35,28 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
         $adminUser = $this->getReference(UserFixtures::REF_ADMIN_ADRI);
         Assert::isInstanceOf($adminUser, User::class);
 
-        $this->addReference(self::REF_PHP_VERSION,$this->loadQuestion(
+        $this->addReference(self::REF_PHP_VERSION, $this->loadQuestion(
             'Which is the latest PHP version?',
             Category::PHP,
             $adminUser,
             approved: true,
         ));
 
-        $this->addReference(self::REF_PHP_STANDS,$this->loadQuestion(
+        $this->addReference(self::REF_PHP_STANDS, $this->loadQuestion(
             'What does PHP stand for?',
             Category::PHP,
             $adminUser,
             approved: true,
         ));
 
-        $this->addReference(self::REF_JS_VERSION,$this->loadQuestion(
+        $this->addReference(self::REF_JS_VERSION, $this->loadQuestion(
             'Which ECMA version are we in?',
             Category::JS,
             $adminUser,
             approved: true,
         ));
 
-        $this->addReference(self::REF_NON_APPROVED,$this->loadQuestion(
+        $this->addReference(self::REF_NON_APPROVED, $this->loadQuestion(
             'Is CircleCI useful for monitorising?',
             Category::Devops,
             $adminUser,
@@ -71,8 +71,7 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
         Category $category,
         User $createdBy,
         bool $approved = false,
-    ): Question
-    {
+    ): Question {
         $question = new Question();
         $question->setContent($content);
         $question->setCategory($category);
@@ -83,5 +82,4 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 
         return $question;
     }
-
 }

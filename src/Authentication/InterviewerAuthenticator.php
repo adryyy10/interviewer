@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Authentication;
 
-use App\Entity\AccountUser;
-use App\Entity\TokenUser;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,8 +18,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 /**
-* Supports both AccountUsers (API key) and TokenUsers.
-*/
+ * Supports both AccountUsers (API key) and TokenUsers.
+ */
 class InterviewerAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
