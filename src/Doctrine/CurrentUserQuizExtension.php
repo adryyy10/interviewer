@@ -13,17 +13,17 @@ use Webmozart\Assert\Assert;
 
 final class CurrentUserQuizExtension implements QueryCollectionExtensionInterface
 {
-
     public function __construct(
         private readonly Security $security)
-    {}
+    {
+    }
 
     public function applyToCollection(
-        QueryBuilder $queryBuilder, 
+        QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null, 
-        array $context = []
+        ?Operation $operation = null,
+        array $context = [],
     ): void {
         // Only apply to Quiz entity and 'my-quizzes' operation
         if (Quiz::class !== $resourceClass || Quiz::MY_QUIZZES !== $operation->getName()) {

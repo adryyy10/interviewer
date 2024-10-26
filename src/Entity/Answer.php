@@ -20,21 +20,21 @@ class Answer
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
         'Question:V$List',
-        'Question:W$Create'
+        'Question:W$Create',
     ])]
     private string $content;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
         'Question:V$List',
-        'Question:W$Create'
+        'Question:W$Create',
     ])]
     private bool $correct;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Annotation\Groups([
         'Question:V$List',
-        'Question:W$Create'
+        'Question:W$Create',
     ])]
     private string $explanation;
 

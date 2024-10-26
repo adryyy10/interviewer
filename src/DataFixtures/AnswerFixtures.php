@@ -14,11 +14,10 @@ use function Symfony\Component\Clock\now;
 
 class AnswerFixtures extends Fixture implements DependentFixtureInterface
 {
-
     public function __construct(
         private readonly EntityManagerInterface $em,
-    )
-    {}
+    ) {
+    }
 
     public function getDependencies()
     {
@@ -31,7 +30,7 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
     {
         $phpQuestionVersion = $this->getReference(QuestionFixtures::REF_PHP_VERSION);
         Assert::isInstanceOf($phpQuestionVersion, Question::class);
-        
+
         $this->loadAnswer(
             '7.4',
             $phpQuestionVersion,
@@ -66,7 +65,7 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
         $this->loadAnswer(
             'Personal Home Page',
             $phpQuestionStands,
-            explanation: "Incorrect",
+            explanation: 'Incorrect',
             isCorrect: false
         );
 
@@ -74,21 +73,20 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
             'PHP: Hypertext Preprocessor',
             $phpQuestionStands,
             isCorrect: true,
-            explanation: "Correct!"
-
+            explanation: 'Correct!'
         );
 
         $this->loadAnswer(
             'Preprocessor Home Page',
             $phpQuestionStands,
-            explanation: "Incorrect",
+            explanation: 'Incorrect',
             isCorrect: false
         );
 
         $this->loadAnswer(
             'Personal Hypertext Processor',
             $phpQuestionStands,
-            explanation: "Incorrect",
+            explanation: 'Incorrect',
             isCorrect: false
         );
 
@@ -100,8 +98,7 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
         Question $question,
         string $explanation,
         bool $isCorrect,
-    ): Answer
-    {
+    ): Answer {
         $answer = new Answer();
         $answer->setContent($content);
         $answer->setQuestion($question);
@@ -113,5 +110,4 @@ class AnswerFixtures extends Fixture implements DependentFixtureInterface
 
         return $answer;
     }
-
 }

@@ -17,9 +17,8 @@ class UserFixtures extends Fixture
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        UserPasswordHasherInterface $passwordHasher
-    )
-    {
+        UserPasswordHasherInterface $passwordHasher,
+    ) {
         $this->passwordHasher = $passwordHasher;
     }
 
@@ -50,8 +49,7 @@ class UserFixtures extends Fixture
         string $password,
         string $apikey,
         bool $isAdmin = false,
-    ): User
-    {
+    ): User {
         $user = new User();
         $user->setUsername($username);
         $user->setEmail($email);
@@ -66,7 +64,7 @@ class UserFixtures extends Fixture
         }
 
         $this->em->persist($user);
+
         return $user;
     }
-
 }

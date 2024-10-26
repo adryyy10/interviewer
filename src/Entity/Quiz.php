@@ -6,9 +6,9 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Interface\CreatableByUserInterface;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity]
 #[ApiResource(
@@ -16,7 +16,7 @@ use Doctrine\DBAL\Types\Types;
         new Post(
             security: "is_granted('ROLE_USER')",
             denormalizationContext: [
-                'groups' => ['Quiz:W$Create']
+                'groups' => ['Quiz:W$Create'],
             ]
         ),
         new GetCollection(
@@ -29,13 +29,12 @@ use Doctrine\DBAL\Types\Types;
             uriTemplate: '/my-quizzes',
             normalizationContext: [
                 'groups' => [
-                    'Quiz:V$List'
-                ]
+                    'Quiz:V$List',
+                ],
             ]
         ),
     ]
 )]
-
 class Quiz implements CreatableByUserInterface
 {
     public const MY_QUIZZES = 'my-quizzes';
@@ -43,6 +42,9 @@ class Quiz implements CreatableByUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([
+        'Quiz:V$List',
+    ])]
     private int $id;
 
     #[ORM\Column(type: Types::INTEGER)]
@@ -90,6 +92,7 @@ class Quiz implements CreatableByUserInterface
     public function setPunctuation(int $punctuation): self
     {
         $this->punctuation = $punctuation;
+
         return $this;
     }
 
@@ -106,6 +109,7 @@ class Quiz implements CreatableByUserInterface
     public function setCreatedBy(User $createdBy): self
     {
         $this->createdBy = $createdBy;
+
         return $this;
     }
 
@@ -117,6 +121,7 @@ class Quiz implements CreatableByUserInterface
     public function setRemarks(?string $remarks): self
     {
         $this->remarks = $remarks;
+
         return $this;
     }
 }

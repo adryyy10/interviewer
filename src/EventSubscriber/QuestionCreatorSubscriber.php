@@ -3,22 +3,20 @@
 namespace App\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
-use App\Entity\Question;
-use App\Entity\Questionnaire;
 use App\Entity\User;
 use App\Interface\CreatableByUserInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Webmozart\Assert\Assert;
 
 class QuestionCreationSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly Security $security)
-    {}
+    {
+    }
 
     public static function getSubscribedEvents()
     {
@@ -33,7 +31,7 @@ class QuestionCreationSubscriber implements EventSubscriberInterface
         $method = $event->getRequest()->getMethod();
 
         // If method !== POST or we are creating a user, skip
-        if ($method !== 'POST' || str_contains($event->getRequest()->getUri(), '/signup')) {
+        if ('POST' !== $method || str_contains($event->getRequest()->getUri(), '/signup')) {
             return;
         }
 

@@ -27,8 +27,8 @@ use function Symfony\Component\Clock\now;
         new GetCollection(
             normalizationContext: [
                 'groups' => [
-                    'Question:V$List'
-                ]
+                    'Question:V$List',
+                ],
             ]
         ),
         new GetCollection(
@@ -36,8 +36,8 @@ use function Symfony\Component\Clock\now;
             uriTemplate: '/admin/questions',
             normalizationContext: [
                 'groups' => [
-                    'Question:V$AdminList'
-                ]
+                    'Question:V$AdminList',
+                ],
             ]
         ),
         new Get(
@@ -45,8 +45,8 @@ use function Symfony\Component\Clock\now;
             security: "is_granted('ROLE_ADMIN')",
             normalizationContext: [
                 'groups' => [
-                    'Question:V$AdminDetail'
-                ]
+                    'Question:V$AdminDetail',
+                ],
             ]
         ),
         new Patch(
@@ -54,13 +54,13 @@ use function Symfony\Component\Clock\now;
             security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: [
                 'groups' => [
-                    'Question:W$Update'
-                ]
+                    'Question:W$Update',
+                ],
             ],
             normalizationContext: [
                 'groups' => [
-                    'Question:V$AdminDetail'
-                ]
+                    'Question:V$AdminDetail',
+                ],
             ],
         ),
         new Post(
@@ -68,15 +68,15 @@ use function Symfony\Component\Clock\now;
             security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: [
                 'groups' => [
-                    'Question:W$Create'
+                    'Question:W$Create',
                 ],
-                'disable_type_enforcement' => true
+                'disable_type_enforcement' => true,
             ],
         ),
         new Delete(
             uriTemplate: '/admin/questions/{id}',
             security: "is_granted('ROLE_ADMIN')",
-        )
+        ),
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['category' => 'iexact'])]
@@ -148,7 +148,7 @@ class Question implements CreatableByUserInterface
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question', cascade: ['persist', 'remove'])]
     #[Annotation\Groups([
         'Question:V$List',
-        'Question:W$Create'
+        'Question:W$Create',
     ])]
     private Collection $answers;
 

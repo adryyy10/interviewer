@@ -12,11 +12,11 @@ use App\Repository\UserRepository;
 use App\State\UserCreateProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation;
 
 use function Symfony\Component\Clock\now;
 
@@ -25,9 +25,9 @@ use function Symfony\Component\Clock\now;
     operations: [
         new GetCollection(
             security: "is_granted('ROLE_ADMIN')",
-            uriTemplate: "/admin/users",
+            uriTemplate: '/admin/users',
             normalizationContext: [
-                'groups' => ['User:V$List']
+                'groups' => ['User:V$List'],
             ]
         ),
         new Get(
@@ -35,8 +35,8 @@ use function Symfony\Component\Clock\now;
             uriTemplate: '/admin/users/{id}',
             normalizationContext: [
                 'groups' => [
-                    'User:V$AdminDetail'
-                ]
+                    'User:V$AdminDetail',
+                ],
             ]
         ),
         new Patch(
@@ -44,25 +44,25 @@ use function Symfony\Component\Clock\now;
             security: "is_granted('ROLE_ADMIN')",
             denormalizationContext: [
                 'groups' => [
-                    'User:W$Update'
-                ]
+                    'User:W$Update',
+                ],
             ],
             normalizationContext: [
                 'groups' => [
-                    'User:V$AdminDetail'
-                ]
+                    'User:V$AdminDetail',
+                ],
             ],
         ),
         new Post(
             uriTemplate: '/signup',
             processor: UserCreateProcessor::class,
             denormalizationContext: [
-                'groups' => ['User:W$Create']
+                'groups' => ['User:W$Create'],
             ]
         ),
         new Delete(
             security: "is_granted('ROLE_ADMIN')",
-            uriTemplate: "/admin/users/{id}"
+            uriTemplate: '/admin/users/{id}'
         ),
     ]
 )]
@@ -81,7 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'User:V$AdminDetail',
-        'User:V$List', 
+        'User:V$List',
         'User:W$Create',
         'User:W$Update',
     ])]
@@ -90,7 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
         'User:V$AdminDetail',
-        'User:V$List', 
+        'User:V$List',
         'User:W$Create',
         'User:W$Update',
     ])]
@@ -109,7 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
         'User:V$AdminDetail',
-        'User:V$List', 
+        'User:V$List',
         'User:W$Create',
         'User:W$Update',
     ])]
@@ -120,7 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(type: Types::JSON)]
     #[Annotation\Groups([
-        'User:V$List', 
+        'User:V$List',
         'User:W$Create',
     ])]
     private array $roles = [];
@@ -158,6 +158,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -169,6 +170,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -183,6 +185,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
         return $this;
     }
 
@@ -203,6 +206,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -214,11 +218,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdmin(bool $admin): self
     {
         $this->admin = $admin;
+
         return $this;
     }
 
     /**
-     * @return string
      * @see UserInterface
      */
     public function getUserIdentifier(): string
@@ -228,6 +232,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @return string[]
+     *
      * @see UserInterface
      */
     public function getRoles(): array
@@ -244,6 +249,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
         return $this;
     }
 
