@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use App\Enum\Category;
 use App\Interface\CreatableByUserInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -74,6 +75,13 @@ class Quiz implements CreatableByUserInterface
     ])]
     private ?string $remarks = null;
 
+    #[ORM\Column(length: 255)]
+    #[Groups([
+        'Quiz:V$List',
+        'Quiz:W$Create',
+    ])]
+    private Category $category;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -121,6 +129,18 @@ class Quiz implements CreatableByUserInterface
     public function setRemarks(?string $remarks): self
     {
         $this->remarks = $remarks;
+
+        return $this;
+    }
+
+    public function getCategory(): string
+    {
+        return $this->category->value;
+    }
+
+    public function setCategory(Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

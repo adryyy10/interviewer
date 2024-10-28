@@ -21,6 +21,7 @@ class QuizTest extends InterviewerTestCase
         static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 87,
+                'category' => 'php',
             ],
             headers: [
                 'Content-Type' => 'application/ld+json',
@@ -34,6 +35,7 @@ class QuizTest extends InterviewerTestCase
             "hydra:member" => [
                 [
                     "punctuation" => 87,
+                    'category' => 'php',
                 ]
             ],
         ]);
