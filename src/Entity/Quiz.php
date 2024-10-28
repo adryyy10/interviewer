@@ -102,7 +102,7 @@ class Quiz implements CreatableByUserInterface
     #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: UserAnswer::class, cascade: ['persist', 'remove'])]
     #[Groups([
         'Quiz:V$Detail',
-        'Quiz:W$Create'
+        'Quiz:W$Create',
     ])]
     private Collection $userAnswers;
 
@@ -183,18 +183,6 @@ class Quiz implements CreatableByUserInterface
         if (!$this->userAnswers->contains($userAnswer)) {
             $this->userAnswers->add($userAnswer);
             $userAnswer->setQuiz($this);
-        }
-    
-        return $this;
-    }
-
-    public function removeUserAnswer(UserAnswer $userAnswer): self
-    {
-        if ($this->userAnswers->removeElement($userAnswer)) {
-            // set the owning side to null (unless already changed)
-            if ($userAnswer->getQuiz() === $this) {
-                $userAnswer->setQuiz(null);
-            }
         }
 
         return $this;

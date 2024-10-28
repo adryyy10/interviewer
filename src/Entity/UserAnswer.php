@@ -3,8 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 class UserAnswer
@@ -22,7 +22,7 @@ class UserAnswer
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'Quiz:V$Detail',
-        'Quiz:W$Create'
+        'Quiz:W$Create',
     ])]
     #[Assert\NotNull]
     #[Assert\Valid]
@@ -32,7 +32,7 @@ class UserAnswer
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         'Quiz:V$Detail',
-        'Quiz:W$Create'
+        'Quiz:W$Create',
     ])]
     #[Assert\NotNull]
     #[Assert\Valid]

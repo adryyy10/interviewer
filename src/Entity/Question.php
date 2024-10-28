@@ -248,6 +248,7 @@ class Question implements CreatableByUserInterface
         $this->setCreatedAt(now());
         $this->answers = new ArrayCollection();
     }
+
     /**
      * @return Collection<int, Answer>
      */
@@ -282,5 +283,4 @@ class Question implements CreatableByUserInterface
     {
         return $this->content;
     }
-
 }
