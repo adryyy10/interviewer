@@ -4,6 +4,11 @@ namespace App\Tests;
 
 class QuestionTest extends InterviewerTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
+
     public function testListQuestions(): void
     {
         $res = static::createClient()->request('GET', '/questions')->toArray();

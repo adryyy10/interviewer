@@ -3,6 +3,7 @@
 namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use App\Entity\Answer;
 use App\Entity\Question;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Process\Process;
@@ -104,5 +105,13 @@ class InterviewerTestCase extends ApiTestCase
         Assert::isInstanceOf($question, Question::class);
 
         return $question;
+    }
+
+    protected function findAnswerByContent(string $content): Answer
+    {
+        $answer = $this->getEm()->getRepository(Answer::class)->findOneBy(['content' => $content]);
+        Assert::isInstanceOf($answer, Answer::class);
+
+        return $answer;
     }
 }

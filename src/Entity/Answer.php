@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Action\NotFoundAction;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use App\Repository\AnswerRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,6 +13,14 @@ use Symfony\Component\Serializer\Annotation;
 use function Symfony\Component\Clock\now;
 
 #[ORM\Entity(repositoryClass: AnswerRepository::class)]
+#[ApiResource(operations: [
+    // Disabling GET operation but can still be identified by an IRI
+    new Get(
+        controller: NotFoundAction::class,
+        read: false,
+        output: false
+    ),
+])]
 class Answer
 {
     #[ORM\Id]
@@ -20,6 +31,7 @@ class Answer
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
         'Question:V$List',
+        'Quiz:V$Detail',
         'Question:W$Create',
     ])]
     private string $content;
@@ -112,5 +124,10 @@ class Answer
     public function __construct()
     {
         $this->setCreatedAt(now());
+    }
+
+    public function __toString(): string
+    {
+        return $this->content;
     }
 }
