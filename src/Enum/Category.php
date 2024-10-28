@@ -7,4 +7,5 @@ enum Category: string
     case PHP = 'php';
     case JS = 'js';
     case Devops = 'devops';
+    case All = 'all';
 }
