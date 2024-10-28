@@ -98,6 +98,7 @@ class Question implements CreatableByUserInterface
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
+        'Quiz:V$Detail',
         'Question:W$Create',
         'Question:W$Update',
     ])]
@@ -108,6 +109,7 @@ class Question implements CreatableByUserInterface
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
+        'Quiz:V$Detail',
         'Question:W$Create',
         'Question:W$Update',
     ])]
@@ -246,7 +248,6 @@ class Question implements CreatableByUserInterface
         $this->setCreatedAt(now());
         $this->answers = new ArrayCollection();
     }
-
     /**
      * @return Collection<int, Answer>
      */
@@ -276,4 +277,10 @@ class Question implements CreatableByUserInterface
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->content;
+    }
+
 }

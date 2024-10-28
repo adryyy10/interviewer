@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Enum\Category;
 use App\Interface\CreatableByUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -18,6 +21,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('ROLE_USER')",
             denormalizationContext: [
                 'groups' => ['Quiz:W$Create'],
+            ]
+        ),
+        new Get(
+            normalizationContext: [
+                'groups' => [
+                    'Quiz:V$Detail',
+                ],
             ]
         ),
         new GetCollection(
@@ -50,6 +60,7 @@ class Quiz implements CreatableByUserInterface
 
     #[ORM\Column(type: Types::INTEGER)]
     #[Groups([
+        'Quiz:V$Detail',
         'Quiz:V$List',
         'Quiz:W$Create',
     ])]
@@ -57,6 +68,7 @@ class Quiz implements CreatableByUserInterface
 
     #[ORM\Column]
     #[Groups([
+        'Quiz:V$Detail',
         'Quiz:V$List',
     ])]
     private \DateTimeImmutable $createdAt;
@@ -70,6 +82,7 @@ class Quiz implements CreatableByUserInterface
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups([
+        'Quiz:V$Detail',
         'Quiz:V$List',
         'Quiz:W$Create',
     ])]
@@ -77,14 +90,26 @@ class Quiz implements CreatableByUserInterface
 
     #[ORM\Column(length: 255)]
     #[Groups([
+        'Quiz:V$Detail',
         'Quiz:V$List',
         'Quiz:W$Create',
     ])]
     private Category $category;
 
+    /**
+     * @var Collection<int, UserAnswer>
+     */
+    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: UserAnswer::class, cascade: ['persist', 'remove'])]
+    #[Groups([
+        'Quiz:V$Detail',
+        'Quiz:W$Create'
+    ])]
+    private Collection $userAnswers;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->userAnswers = new ArrayCollection();
     }
 
     public function getId(): int
@@ -141,6 +166,36 @@ class Quiz implements CreatableByUserInterface
     public function setCategory(Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserAnswer>
+     */
+    public function getUserAnswers(): Collection
+    {
+        return $this->userAnswers;
+    }
+
+    public function addUserAnswer(UserAnswer $userAnswer): self
+    {
+        if (!$this->userAnswers->contains($userAnswer)) {
+            $this->userAnswers->add($userAnswer);
+            $userAnswer->setQuiz($this);
+        }
+    
+        return $this;
+    }
+
+    public function removeUserAnswer(UserAnswer $userAnswer): self
+    {
+        if ($this->userAnswers->removeElement($userAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getQuiz() === $this) {
+                $userAnswer->setQuiz(null);
+            }
+        }
 
         return $this;
     }
