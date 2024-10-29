@@ -22,7 +22,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertTrue($this->isInList($res, 'Which ECMA version are we in?'));
 
         // approved filter
-        $res = static::createClient()->request('GET', '/questions?approved=true')->toArray();
+        $res = static::createClient()->request('GET', '/questions')->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertTrue($this->isInList($res, 'Which ECMA version are we in?'));
         $this->assertFalse($this->isInList($res, 'Is CircleCI useful for monitorising?'));
