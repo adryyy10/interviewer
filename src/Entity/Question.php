@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -25,6 +24,7 @@ use function Symfony\Component\Clock\now;
 #[ApiResource(
     operations: [
         new GetCollection(
+            name: self::APPROVED_QUESTIONS,
             normalizationContext: [
                 'groups' => [
                     'Question:V$List',
@@ -80,10 +80,11 @@ use function Symfony\Component\Clock\now;
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['category' => 'iexact'])]
-#[ApiFilter(BooleanFilter::class, properties: ['approved'])]
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question implements CreatableByUserInterface
 {
+    public const APPROVED_QUESTIONS = 'approved-questions';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
