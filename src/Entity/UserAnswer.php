@@ -16,7 +16,11 @@ class UserAnswer
 
     #[ORM\ManyToOne(inversedBy: 'userAnswers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Quiz $quiz = null;
+    #[Groups([
+        'Quiz:V$Detail',
+        'Quiz:W$Create',
+    ])]
+    private Quiz $quiz;
 
     #[ORM\ManyToOne(targetEntity: Question::class)]
     #[ORM\JoinColumn(nullable: false)]

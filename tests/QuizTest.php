@@ -58,7 +58,6 @@ class QuizTest extends InterviewerTestCase
         $question1Iri = $this->findIriBy(Question::class, ['id' => $question1->getId()]);
         $answer1Iri = $this->findIriBy(Answer::class, ['id' => $answer1->getId()]);
 
-
         $this->logInAsRegularUser();
         $res = static::request('POST', '/quizzes',
             json: [
@@ -77,6 +76,7 @@ class QuizTest extends InterviewerTestCase
         )->toArray();
         $createdIri = $res['@id'];
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        dd($res);
 
         $res = static::request('GET', $createdIri)->toArray();
         $this->assertResponseIsSuccessful();

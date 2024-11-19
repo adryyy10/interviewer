@@ -21,9 +21,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
             security: "is_granted('ROLE_USER')",
             denormalizationContext: [
                 'groups' => ['Quiz:W$Create'],
+            ],
+            normalizationContext: [
+                'groups' => [
+                    'Quiz:V$Detail',
+                ],
             ]
         ),
         new Get(
+            // TODO: add security
             normalizationContext: [
                 'groups' => [
                     'Quiz:V$Detail',

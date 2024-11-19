@@ -91,6 +91,7 @@ class Question implements CreatableByUserInterface
     #[Annotation\Groups([
         'Question:V$AdminDetail',
         'Question:V$AdminList',
+        'Question:V$List',
     ])]
     private int $id;
 
