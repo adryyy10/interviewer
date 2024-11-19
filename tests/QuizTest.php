@@ -58,7 +58,6 @@ class QuizTest extends InterviewerTestCase
         $question1Iri = $this->findIriBy(Question::class, ['id' => $question1->getId()]);
         $answer1Iri = $this->findIriBy(Answer::class, ['id' => $answer1->getId()]);
 
-
         $this->logInAsRegularUser();
         $res = static::request('POST', '/quizzes',
             json: [

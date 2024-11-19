@@ -26,6 +26,9 @@ class Answer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Annotation\Groups([
+        'Question:V$List',
+    ])]
     private int $id;
 
     #[ORM\Column(type: Types::TEXT)]
