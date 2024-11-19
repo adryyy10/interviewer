@@ -76,7 +76,6 @@ class QuizTest extends InterviewerTestCase
         )->toArray();
         $createdIri = $res['@id'];
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        dd($res);
 
         $res = static::request('GET', $createdIri)->toArray();
         $this->assertResponseIsSuccessful();
