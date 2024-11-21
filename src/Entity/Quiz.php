@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -13,6 +16,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
@@ -52,6 +56,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ),
     ]
 )]
+#[ApiFilter(OrderFilter::class, properties: ['createdAt' => 'DESC'])]
 class Quiz implements CreatableByUserInterface
 {
     public const MY_QUIZZES = 'my-quizzes';
@@ -105,11 +110,13 @@ class Quiz implements CreatableByUserInterface
     /**
      * @var Collection<int, UserAnswer>
      */
-    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: UserAnswer::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: UserAnswer::class, cascade: ['persist'])]
     #[Groups([
         'Quiz:V$Detail',
         'Quiz:W$Create',
     ])]
+    #[ApiProperty(push: true)]
+    #[Assert\Valid]
     private Collection $userAnswers;
 
     public function __construct()
@@ -184,11 +191,23 @@ class Quiz implements CreatableByUserInterface
         return $this->userAnswers;
     }
 
-    public function addUserAnswer(UserAnswer $userAnswer): self
+    public function addUserAnswer(UserAnswer $userAnswer): static
     {
         if (!$this->userAnswers->contains($userAnswer)) {
             $this->userAnswers->add($userAnswer);
             $userAnswer->setQuiz($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAnswer(UserAnswer $userAnswer): static
+    {
+        if ($this->userAnswers->removeElement($userAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($userAnswer->getQuiz() === $this) {
+                $userAnswer->setQuiz(null);
+            }
         }
 
         return $this;
