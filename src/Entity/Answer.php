@@ -28,6 +28,7 @@ class Answer
     #[ORM\Column]
     #[Annotation\Groups([
         'Question:V$List',
+        'Quiz:W$Create',
     ])]
     private int $id;
 
@@ -36,6 +37,7 @@ class Answer
         'Question:V$List',
         'Quiz:V$Detail',
         'Question:W$Create',
+        'Quiz:W$Create',
     ])]
     private string $content;
 

@@ -12,15 +12,13 @@ class UserAnswer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups([
+        'Quiz:V$Detail',
+    ])]
     private int $id;
 
     #[ORM\ManyToOne(inversedBy: 'userAnswers')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups([
-        'Quiz:V$Detail',
-        'Quiz:W$Create',
-    ])]
-    private Quiz $quiz;
+    private ?Quiz $quiz = null;
 
     #[ORM\ManyToOne(targetEntity: Question::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -40,7 +38,7 @@ class UserAnswer
     ])]
     #[Assert\NotNull]
     #[Assert\Valid]
-    private Answer $selectedAnswer;
+    private Answer $answer;
 
     public function getId(): int
     {
@@ -52,7 +50,7 @@ class UserAnswer
         return $this->quiz;
     }
 
-    public function setQuiz(Quiz $quiz): self
+    public function setQuiz(?Quiz $quiz): self
     {
         $this->quiz = $quiz;
 
@@ -71,14 +69,14 @@ class UserAnswer
         return $this;
     }
 
-    public function getSelectedAnswer(): Answer
+    public function getAnswer(): Answer
     {
-        return $this->selectedAnswer;
+        return $this->answer;
     }
 
-    public function setSelectedAnswer(Answer $selectedAnswer): self
+    public function setAnswer(Answer $answer): self
     {
-        $this->selectedAnswer = $selectedAnswer;
+        $this->answer = $answer;
 
         return $this;
     }

@@ -92,6 +92,7 @@ class Question implements CreatableByUserInterface
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
+        'Quiz:W$Create',
     ])]
     private int $id;
 
@@ -103,6 +104,7 @@ class Question implements CreatableByUserInterface
         'Quiz:V$Detail',
         'Question:W$Create',
         'Question:W$Update',
+        'Quiz:W$Create',
     ])]
     private string $content;
 
@@ -112,6 +114,7 @@ class Question implements CreatableByUserInterface
         'Question:V$AdminList',
         'Question:V$List',
         'Quiz:V$Detail',
+        'Quiz:W$Create',
         'Question:W$Create',
         'Question:W$Update',
     ])]

@@ -59,29 +59,33 @@ class QuizTest extends InterviewerTestCase
         $answer1Iri = $this->findIriBy(Answer::class, ['id' => $answer1->getId()]);
 
         $this->logInAsRegularUser();
-        $res = static::request('POST', '/quizzes',
+        $response = static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 87,
                 'category' => 'php',
                 'userAnswers' => [
                     [
                         'question' => $question1Iri,
-                        'selectedAnswer' => $answer1Iri
+                        'answer' => $answer1Iri
                     ],
                 ]
             ],
             headers: [
                 'Content-Type' => 'application/ld+json',
             ],
-        )->toArray();
-        $createdIri = $res['@id'];
+        );
+
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+
+        $res = $response->toArray();
+        dd($res);
+        $createdIri = $res['@id'];
 
         $res = static::request('GET', $createdIri)->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains(
             [
-                "punctuation" => 87,
+                'punctuation' => 87,
                 'category' => 'php',
                 'userAnswers' => [
                     [
@@ -89,7 +93,7 @@ class QuizTest extends InterviewerTestCase
                             'content' => 'Which is the latest PHP version?',
                             'category' => 'php',
                         ],
-                        'selectedAnswer' => [
+                        'answer' => [
                             'content' => '8.3',
                         ],
                     ],
