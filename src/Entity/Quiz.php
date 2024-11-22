@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ]
         ),
         new Get(
-            // TODO: add security
+            security: "user == object.getCreatedBy() or is_granted('ROLE_ADMIN')",
             normalizationContext: [
                 'groups' => [
                     'Quiz:V$Detail',
@@ -110,7 +110,7 @@ class Quiz implements CreatableByUserInterface
     /**
      * @var Collection<int, UserAnswer>
      */
-    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: UserAnswer::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: UserAnswer::class, cascade: ['persist', 'remove'])]
     #[Groups([
         'Quiz:V$Detail',
         'Quiz:W$Create',
