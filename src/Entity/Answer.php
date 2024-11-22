@@ -44,6 +44,7 @@ class Answer
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
         'Question:V$List',
+        'Quiz:V$Detail',
         'Question:W$Create',
     ])]
     private bool $correct;
@@ -51,6 +52,7 @@ class Answer
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Annotation\Groups([
         'Question:V$List',
+        'Quiz:V$Detail',
         'Question:W$Create',
     ])]
     private string $explanation;

@@ -27,7 +27,7 @@ class QuizTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         $this->logInAsRegularUser();
-        static::request('POST', '/quizzes',
+        $response = static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 87,
                 'category' => 'php',
@@ -37,6 +37,22 @@ class QuizTest extends InterviewerTestCase
             ],
         )->toArray();
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $createdIri = $response['@id'];
+
+        // Admins can see others quizzes
+        $this->logInAsAdmin();
+        static::request('GET', $createdIri);
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->logInAsRegularUser();
+        static::request('GET', $createdIri);
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains(
+            [
+                'punctuation' => 87,
+                'category' => 'php',
+            ]
+        );
 
         static::request('GET', '/my-quizzes');
         $this->assertResponseIsSuccessful();
@@ -58,6 +74,12 @@ class QuizTest extends InterviewerTestCase
         $question1Iri = $this->findIriBy(Question::class, ['id' => $question1->getId()]);
         $answer1Iri = $this->findIriBy(Answer::class, ['id' => $answer1->getId()]);
 
+        $question2 = $this->findQuestionByContent('What does PHP stand for?');
+        $answer2 = $this->findAnswerByContent('PHP: Hypertext Preprocessor');
+
+        $question2Iri = $this->findIriBy(Question::class, ['id' => $question2->getId()]);
+        $answer2Iri = $this->findIriBy(Answer::class, ['id' => $answer2->getId()]);
+
         $this->logInAsRegularUser();
         $response = static::request('POST', '/quizzes',
             json: [
@@ -67,6 +89,10 @@ class QuizTest extends InterviewerTestCase
                     [
                         'question' => $question1Iri,
                         'answer' => $answer1Iri
+                    ],
+                    [
+                        'question' => $question2Iri,
+                        'answer' => $answer2Iri
                     ],
                 ]
             ],
@@ -78,7 +104,6 @@ class QuizTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
         $res = $response->toArray();
-        dd($res);
         $createdIri = $res['@id'];
 
         $res = static::request('GET', $createdIri)->toArray();
@@ -95,6 +120,19 @@ class QuizTest extends InterviewerTestCase
                         ],
                         'answer' => [
                             'content' => '8.3',
+                            'correct' => true,
+                            'explanation' => "PHP 8.3 was released November 23, 2023 and it's the latest one"
+                        ],
+                    ],
+                    [
+                        'question' => [
+                            'content' => 'What does PHP stand for?',
+                            'category' => 'php',
+                        ],
+                        'answer' => [
+                            'content' => 'PHP: Hypertext Preprocessor',
+                            'correct' => true,
+                            'explanation' => "Correct!"
                         ],
                     ],
                 ]
