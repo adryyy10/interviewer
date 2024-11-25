@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Clock\DatePoint;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -121,7 +122,7 @@ class Quiz implements CreatableByUserInterface
 
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DatePoint();
         $this->userAnswers = new ArrayCollection();
     }
 
