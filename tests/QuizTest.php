@@ -4,10 +4,13 @@ namespace App\Tests;
 
 use App\Entity\Answer;
 use App\Entity\Question;
+use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class QuizTest extends InterviewerTestCase
 {
+    use ClockSensitiveTrait;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,6 +30,20 @@ class QuizTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         $this->logInAsRegularUser();
+        static::mockTime(new \DateTimeImmutable('2022-03-02'));
+        $response = static::request('POST', '/quizzes',
+            json: [
+                'punctuation' => 20,
+                'category' => 'js',
+            ],
+            headers: [
+                'Content-Type' => 'application/ld+json',
+            ],
+        )->toArray();
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $createdIri = $response['@id'];
+
+        static::mockTime(new \DateTimeImmutable('2024-03-02'));
         $response = static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 87,
@@ -54,14 +71,18 @@ class QuizTest extends InterviewerTestCase
             ]
         );
 
-        static::request('GET', '/my-quizzes');
+        static::request('GET', '/my-quizzes?order[createdAt]=desc');
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
             "hydra:member" => [
                 [
                     "punctuation" => 87,
                     'category' => 'php',
-                ]
+                ],
+                [
+                    "punctuation" => 20,
+                    'category' => 'js',
+                ],
             ],
         ]);
     }
