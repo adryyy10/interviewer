@@ -18,6 +18,11 @@ use function Symfony\Component\Clock\now;
         new GetCollection(
             security: "is_granted('ROLE_ADMIN')",
             uriTemplate: '/admin/feedback',
+            normalizationContext: [
+                'groups' => [
+                    'Feedback:V$AdminList',
+                ],
+            ],
         ),
         new Post(
             uriTemplate: '/feedback',
@@ -40,15 +45,22 @@ class Feedback implements CreatableByUserInterface
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
+        'Feedback:V$AdminList',
         'Feedback:W$Create',
     ])]
     private ?string $content = null;
 
     #[ORM\Column]
+    #[Annotation\Groups([
+        'Feedback:V$AdminList',
+    ])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Annotation\Groups([
+        'Feedback:V$AdminList',
+    ])]
     private User $createdBy;
 
     public function __construct()
