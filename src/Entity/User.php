@@ -137,12 +137,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Quiz::class, mappedBy: 'createdBy', cascade: ['persist', 'remove'])]
     private Collection $quizzes;
 
+    /**
+     * @var Collection<int, Feedback>
+     */
+    #[ORM\OneToMany(targetEntity: Feedback::class, mappedBy: 'createdBy', cascade: ['remove'])]
+    private Collection $feedbacks;
+
     public function __construct()
     {
         $this->setCreatedAt(now());
         $this->roles = ['ROLE_USER'];
         $this->questions = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
+        $this->feedbacks = new ArrayCollection();
     }
 
     public function getId(): int
@@ -267,5 +274,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getQuizzes(): Collection
     {
         return $this->quizzes;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getFeedback(): Collection
+    {
+        return $this->feedbacks;
     }
 }

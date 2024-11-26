@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Webmozart\Assert\Assert;
 
-class QuestionCreatorSubscriber implements EventSubscriberInterface
+class FeedbackCreatorSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly Security $security)

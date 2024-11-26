@@ -23,7 +23,13 @@ services:
         class: App\Authentication\InterviewerUserProvider
         arguments: ['@doctrine.orm.entity_manager']
 
-    App\EventSubscriber\QuestionCreationSubscriber:
+    App\EventSubscriber\QuestionCreatorSubscriber:
+        arguments:
+            $security: '@security.helper'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    App\EventSubscriber\FeedbackCreatorSubscriber:
         arguments:
             $security: '@security.helper'
         tags:
