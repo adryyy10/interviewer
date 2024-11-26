@@ -78,6 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, unique: true)]
     #[Annotation\Groups([
+        'Feedback:V$AdminList',
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'User:V$AdminDetail',
@@ -89,6 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
+        'Feedback:V$AdminList',
         'User:V$AdminDetail',
         'User:V$List',
         'User:W$Create',
