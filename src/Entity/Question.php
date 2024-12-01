@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Enum\Category;
 use App\Interface\CreatableByUserInterface;
+use App\Provider\Question\QuestionsQuizProvider;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,12 +25,12 @@ use function Symfony\Component\Clock\now;
 #[ApiResource(
     operations: [
         new GetCollection(
-            name: self::APPROVED_QUESTIONS,
             normalizationContext: [
                 'groups' => [
                     'Question:V$List',
                 ],
-            ]
+            ],
+            provider: QuestionsQuizProvider::class,
         ),
         new GetCollection(
             security: "is_granted('ROLE_ADMIN')",
@@ -83,8 +84,6 @@ use function Symfony\Component\Clock\now;
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question implements CreatableByUserInterface
 {
-    public const APPROVED_QUESTIONS = 'approved-questions';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

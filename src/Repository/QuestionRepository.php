@@ -16,28 +16,30 @@ class QuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, Question::class);
     }
 
-    //    /**
-    //     * @return Question[] Returns an array of Question objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('q')
-    //            ->andWhere('q.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('q.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Find questions with an optional category filter and shuffle the results.
+     *
+     * @param int $limit The maximum number of questions to return.
+     * @param string|null $category to filter questions by (optional).
+     * @return Question[] The shuffled list of questions.
+     */
+    public function findQuestions(int $limit = 10, ?string $category = null): array
+    {
+        $qb = $this->createQueryBuilder('q')
+            ->setMaxResults($limit);
 
-    //    public function findOneBySomeField($value): ?Question
-    //    {
-    //        return $this->createQueryBuilder('q')
-    //            ->andWhere('q.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($category) {
+            $qb->andWhere('q.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        $qb->andWhere('q.approved = true');
+
+        $questions = $qb->getQuery()->getResult();
+
+        shuffle($questions);
+
+        return $questions;
+    }
+    
 }
