@@ -170,7 +170,7 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        $res = static::request('GET', "/admin/questions/{$question->getId()}")->toArray();
+        static::request('GET', "/admin/questions/{$question->getId()}");
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
             '@context' => '/contexts/Question',
