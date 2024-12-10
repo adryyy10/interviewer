@@ -153,8 +153,10 @@ class Question implements CreatableByUserInterface
      */
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question', cascade: ['persist', 'remove'])]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$List',
         'Question:W$Create',
+        'Question:W$Update',
     ])]
     private Collection $answers;
 

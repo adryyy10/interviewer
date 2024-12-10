@@ -69,7 +69,7 @@ class InterviewerTestCase extends ApiTestCase
     */
     protected static function request(string $method, string $url, mixed $json = null, mixed $headers = []): ResponseInterface
     {
-        $headers += ['Authorization' => 'Basic '.base64_encode(static::$myAuthToken)];
+        $headers += ['Authorization' => 'Basic '.base64_encode(static::$myAuthToken ?? '')];
         if ('PATCH' === $method) {
             $headers += ['Content-Type' => 'application/merge-patch+json'];
         }

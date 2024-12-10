@@ -170,8 +170,25 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsAdmin();
-        static::request('GET', "/admin/questions/{$question->getId()}");
+        $res = static::request('GET', "/admin/questions/{$question->getId()}")->toArray();
         $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            '@context' => '/contexts/Question',
+            '@id' => "/admin/questions/{$question->getId()}",
+            '@type' => 'Question',
+            'content' => 'Which is the latest PHP version?',
+            "category" => "php",
+            "createdBy" => [
+                "username" => "adri"
+            ],
+            "approved" => true,
+            "answers" => [
+                [
+                    'content' => '7.4',
+                    'correct' => false
+                ]
+            ]
+        ]);
     }
 
     public function testUpdateQuestion(): void
@@ -187,7 +204,33 @@ class QuestionTest extends InterviewerTestCase
             "approved" => true,
         ]);
 
-        static::request('PATCH', "/admin/questions/{$question->getId()}", ['approved' => false, 'category' => 'js', 'content' => 'Which is the latest PHP version????']);
+        static::request(
+            'PATCH', 
+            "/admin/questions/{$question->getId()}", 
+            [
+                'content' => 'Which is the latest PHP version????',
+                'category' => 'js',
+                'approved' => false,
+                "answers" => [
+                    [
+                        'content' => '7.4',
+                        'correct' => false
+                    ],
+                    [
+                        'content' => '8.1',
+                        'correct' => false
+                    ],
+                    [
+                        'content' => '8.3',
+                        'correct' => false
+                    ],
+                    [
+                        'content' => '8.4',
+                        'correct' => true
+                    ],
+                ]
+            ]
+        );
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
             "content" => "Which is the latest PHP version????",
@@ -195,6 +238,24 @@ class QuestionTest extends InterviewerTestCase
             "approved" => false,
             "createdBy" => [
                 'username' => 'adri'
+            ],
+            "answers" => [
+                [
+                    'content' => '7.4',
+                    'correct' => false
+                ],
+                [
+                    'content' => '8.1',
+                    'correct' => false
+                ],
+                [
+                    'content' => '8.3',
+                    'correct' => false
+                ],
+                [
+                    'content' => '8.4',
+                    'correct' => true
+                ],
             ]
         ]);
     }

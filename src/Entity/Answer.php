@@ -34,26 +34,32 @@ class Answer
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$List',
         'Quiz:V$Detail',
         'Question:W$Create',
+        'Question:W$Update',
         'Quiz:W$Create',
     ])]
     private string $content;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$List',
         'Quiz:V$Detail',
         'Question:W$Create',
+        'Question:W$Update',
     ])]
     private bool $correct;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Annotation\Groups([
+        'Question:V$AdminDetail',
         'Question:V$List',
         'Quiz:V$Detail',
         'Question:W$Create',
+        'Question:W$Update',
     ])]
     private string $explanation;
 
