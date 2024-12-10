@@ -19,9 +19,10 @@ class QuestionRepository extends ServiceEntityRepository
     /**
      * Find questions with an optional category filter and shuffle the results.
      *
-     * @param int $limit The maximum number of questions to return.
-     * @param string|null $category to filter questions by (optional).
-     * @return Question[] The shuffled list of questions.
+     * @param int         $limit    the maximum number of questions to return
+     * @param string|null $category to filter questions by (optional)
+     *
+     * @return Question[] the shuffled list of questions
      */
     public function findQuestions(int $limit = 10, ?string $category = null): array
     {
@@ -41,5 +42,4 @@ class QuestionRepository extends ServiceEntityRepository
 
         return $questions;
     }
-    
 }
