@@ -15,10 +15,16 @@ class QuestionTest extends InterviewerTestCase
         $this->assertResponseIsSuccessful();
         $this->assertTrue($this->isInList($res, 'Which is the latest PHP version?'));
 
-        // category filter
-        $res = static::createClient()->request('GET', '/questions?category=js')->toArray();
+        // single category filter
+        $res = static::createClient()->request('GET', '/questions?category[]=js')->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertFalse($this->isInList($res, 'Which is the latest PHP version?'));
+        $this->assertTrue($this->isInList($res, 'Which ECMA version are we in?'));
+
+        // multiple category filter
+        $res = static::createClient()->request('GET', '/questions?category[]=js&category[]=php')->toArray();
+        $this->assertResponseIsSuccessful();
+        $this->assertTrue($this->isInList($res, 'Which is the latest PHP version?'));
         $this->assertTrue($this->isInList($res, 'Which ECMA version are we in?'));
 
         // approved filter
