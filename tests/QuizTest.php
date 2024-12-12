@@ -34,7 +34,7 @@ class QuizTest extends InterviewerTestCase
         $response = static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 20,
-                'category' => 'js',
+                'categories' => ['js'],
             ],
             headers: [
                 'Content-Type' => 'application/ld+json',
@@ -47,7 +47,7 @@ class QuizTest extends InterviewerTestCase
         $response = static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 87,
-                'category' => 'php',
+                'categories' => ['php'],
             ],
             headers: [
                 'Content-Type' => 'application/ld+json',
@@ -67,7 +67,7 @@ class QuizTest extends InterviewerTestCase
         $this->assertJsonContains(
             [
                 'punctuation' => 87,
-                'category' => 'php',
+                'categories' => ['php'],
             ]
         );
 
@@ -77,11 +77,11 @@ class QuizTest extends InterviewerTestCase
             "hydra:member" => [
                 [
                     "punctuation" => 87,
-                    'category' => 'php',
+                    'categories' => ['php'],
                 ],
                 [
                     "punctuation" => 20,
-                    'category' => 'js',
+                    'categories' => ['js'],
                 ],
             ],
         ]);
@@ -105,7 +105,7 @@ class QuizTest extends InterviewerTestCase
         $response = static::request('POST', '/quizzes',
             json: [
                 'punctuation' => 87,
-                'category' => 'php',
+                'categories' => ['php', 'js'],
                 'userAnswers' => [
                     [
                         'question' => $question1Iri,
@@ -132,7 +132,7 @@ class QuizTest extends InterviewerTestCase
         $this->assertJsonContains(
             [
                 'punctuation' => 87,
-                'category' => 'php',
+                'categories' => ['php', 'js'],
                 'userAnswers' => [
                     [
                         'question' => [

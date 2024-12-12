@@ -100,13 +100,13 @@ class Quiz implements CreatableByUserInterface
     ])]
     private ?string $remarks = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::JSON)]
     #[Groups([
         'Quiz:V$Detail',
         'Quiz:V$List',
         'Quiz:W$Create',
     ])]
-    private Category $category;
+    private array $categories = [];
 
     /**
      * @var Collection<int, UserAnswer>
@@ -124,6 +124,7 @@ class Quiz implements CreatableByUserInterface
     {
         $this->createdAt = new DatePoint();
         $this->userAnswers = new ArrayCollection();
+        $this->categories = [];
     }
 
     public function getId(): int
@@ -172,15 +173,15 @@ class Quiz implements CreatableByUserInterface
         return $this;
     }
 
-    public function getCategory(): string
+    public function getCategories(): array
     {
-        return $this->category->value;
+        return $this->categories;
     }
-
-    public function setCategory(Category $category): static
+    
+    public function setCategories(array $categories): self
     {
-        $this->category = $category;
-
+        $this->categories = $categories;
+    
         return $this;
     }
 
@@ -205,7 +206,6 @@ class Quiz implements CreatableByUserInterface
     public function removeUserAnswer(UserAnswer $userAnswer): static
     {
         if ($this->userAnswers->removeElement($userAnswer)) {
-            // set the owning side to null (unless already changed)
             if ($userAnswer->getQuiz() === $this) {
                 $userAnswer->setQuiz(null);
             }
