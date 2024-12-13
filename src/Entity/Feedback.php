@@ -41,6 +41,9 @@ class Feedback implements CreatableByUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Annotation\Groups([
+        'Feedback:V$AdminList',
+    ])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]

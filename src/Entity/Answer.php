@@ -61,7 +61,7 @@ class Answer
         'Question:W$Create',
         'Question:W$Update',
     ])]
-    private string $explanation;
+    private ?string $explanation = null;
 
     #[ORM\ManyToOne(inversedBy: 'answers')]
     private ?Question $question = null;
