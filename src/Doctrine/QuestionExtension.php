@@ -24,7 +24,8 @@ class QuestionExtension implements QueryCollectionExtensionInterface
         if (Question::QUIZ_QUESTIONS === $operation->getName()) {
             $rootAlias = $queryBuilder->getRootAliases()[0];
             $queryBuilder->andWhere(sprintf('%s.approved = :approved', $rootAlias))
-                         ->setParameter('approved', true);
+                         ->setParameter('approved', true)
+                         ->orderBy('RAND()');
         }
     }
 }
