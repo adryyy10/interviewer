@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Interface\CreatableByUserInterface;
@@ -21,6 +22,15 @@ use function Symfony\Component\Clock\now;
             normalizationContext: [
                 'groups' => [
                     'Feedback:V$AdminList',
+                ],
+            ],
+        ),
+        new Get(
+            uriTemplate: '/admin/feedback/{id}',
+            security: "is_granted('ROLE_ADMIN')",
+            normalizationContext: [
+                'groups' => [
+                    'Feedback:V$AdminDetail',
                 ],
             ],
         ),
@@ -48,6 +58,7 @@ class Feedback implements CreatableByUserInterface
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
+        'Feedback:V$AdminDetail',
         'Feedback:V$AdminList',
         'Feedback:W$Create',
     ])]
@@ -55,6 +66,7 @@ class Feedback implements CreatableByUserInterface
 
     #[ORM\Column]
     #[Annotation\Groups([
+        'Feedback:V$AdminDetail',
         'Feedback:V$AdminList',
     ])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -62,6 +74,7 @@ class Feedback implements CreatableByUserInterface
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Annotation\Groups([
+        'Feedback:V$AdminDetail',
         'Feedback:V$AdminList',
     ])]
     private User $createdBy;

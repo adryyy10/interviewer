@@ -95,12 +95,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column]
     #[Annotation\Groups([
+        'User:V$MyDetail',
         'User:V$List',
     ])]
     private int $id;
 
     #[ORM\Column(length: 255, unique: true)]
     #[Annotation\Groups([
+        'Feedback:V$AdminDetail',
         'Feedback:V$AdminList',
         'Question:V$AdminDetail',
         'Question:V$AdminList',

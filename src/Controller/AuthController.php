@@ -38,7 +38,7 @@ class AuthController extends Controller
         return new JsonResponse([
             'apiKey' => $user->apiKey,
             'email' => $user->getEmail(),
-            'id' => $user->getId(),
+            'userId' => $user->getId(),
             'firstName' => $user->getUsername(),
             'admin' => $this->security->isGranted('ROLE_ADMIN'),
         ]);

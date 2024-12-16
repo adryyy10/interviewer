@@ -20,12 +20,13 @@ class FeedbackTest extends InterviewerTestCase
         $this->assertResponseStatusCodeSame(403);
 
         $this->logInAsRegularUser();
-        static::request('POST', '/feedback', json: [
+        $response = static::request('POST', '/feedback', json: [
             'content' => 'Could you please create live coding questions?',
         ], headers: [
             'Content-Type' => 'application/ld+json',
-        ]);
+        ])->toArray();
         $this->assertResponseIsSuccessful();
+        $createdIri = $response['@id'];
 
         // Logged as regular user -> 403
         static::request('GET', '/admin/feedback');
@@ -48,5 +49,16 @@ class FeedbackTest extends InterviewerTestCase
                 ]
             ]
         ]);
+
+        static::request('GET', $createdIri);
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains(
+            [
+                'content' => 'Could you please create live coding questions?',
+                'createdBy' => [
+                    'username' => 'regular',
+                ]
+            ]
+        );
     }
 }
