@@ -31,6 +31,15 @@ use function Symfony\Component\Clock\now;
             ]
         ),
         new Get(
+            security: "object == user",
+            uriTemplate: '/users/{id}',
+            normalizationContext: [
+                'groups' => [
+                    'User:V$MyDetail',
+                ],
+            ]
+        ),
+        new Get(
             security: "is_granted('ROLE_ADMIN')",
             uriTemplate: '/admin/users/{id}',
             normalizationContext: [
@@ -50,6 +59,20 @@ use function Symfony\Component\Clock\now;
             normalizationContext: [
                 'groups' => [
                     'User:V$AdminDetail',
+                ],
+            ],
+        ),
+        new Patch(
+            uriTemplate: '/users/{id}',
+            security: "object == user",
+            denormalizationContext: [
+                'groups' => [
+                    'User:W$MyUpdate',
+                ],
+            ],
+            normalizationContext: [
+                'groups' => [
+                    'User:V$MyDetail',
                 ],
             ],
         ),
@@ -83,7 +106,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'Question:V$AdminList',
         'User:V$AdminDetail',
         'User:V$List',
+        'User:V$MyDetail',
         'User:W$Create',
+        'User:W$MyUpdate',
         'User:W$Update',
     ])]
     private string $username;
@@ -93,7 +118,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         'Feedback:V$AdminList',
         'User:V$AdminDetail',
         'User:V$List',
+        'User:V$MyDetail',
         'User:W$Create',
+        'User:W$MyUpdate',
         'User:W$Update',
     ])]
     private string $email;

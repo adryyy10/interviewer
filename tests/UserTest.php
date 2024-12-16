@@ -134,4 +134,39 @@ class UserTest extends InterviewerTestCase
         static::request('DELETE', "/admin/users/{$user->getId()}");
         $this->assertResponseIsSuccessful();
     }
+
+    public function testGetUpdateMyUser(): void
+    {
+        $user = $this->getEm()->getRepository(User::class)->find(2);
+        Assert::isInstanceOf($user, User::class);
+
+        // No login -> 403
+        static::request('GET', "/users/{$user->getId()}");
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->logInAsRegularUser();
+        static::request('GET', "/users/{$user->getId()}");
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            "username" => "regular",
+            "email" => "regular.user@test.com",
+        ]);
+
+        static::request(
+            'PATCH', 
+            "/users/{$user->getId()}", 
+            [
+                'username' => 'modifiedAdri', 
+                'email' => 'adriamodified@test.com', 
+            ]
+        );
+        $this->assertResponseIsSuccessful();
+
+        
+        static::request('GET', "/users/{$user->getId()}");
+        $this->assertJsonContains([
+            "username" => "modifiedAdri",
+            "email" => "adriamodified@test.com",
+        ]);
+    }
 }
