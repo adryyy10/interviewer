@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Webmozart\Assert\Assert;
 
-class QuestionCreatorSubscriber implements EventSubscriberInterface
+class CreatorSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly Security $security)
@@ -30,8 +30,12 @@ class QuestionCreatorSubscriber implements EventSubscriberInterface
         $entity = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        // If method !== POST or we are creating a user, skip
-        if ('POST' !== $method || str_contains($event->getRequest()->getUri(), '/signup')) {
+        if ('POST' !== $method) {
+            return;
+        }
+
+        // Return if we are creating a new user
+        if (str_contains($event->getRequest()->getUri(), '/signup')) {
             return;
         }
 

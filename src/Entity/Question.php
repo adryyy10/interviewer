@@ -98,6 +98,7 @@ class Question implements CreatableByUserInterface
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
+        'FailedQuestion:V$List',
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
@@ -110,6 +111,7 @@ class Question implements CreatableByUserInterface
 
     #[ORM\Column(length: 255)]
     #[Annotation\Groups([
+        'FailedQuestion:V$List',
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
