@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Post;
 use App\Interface\CreatableByUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
@@ -15,13 +16,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(
             security: "is_granted('ROLE_USER')",
             normalizationContext: [
-                'groups' => ['FailedQuestion:V$List']
+                'groups' => ['FailedQuestion:V$List'],
             ]
         ),
         new Post(
             security: "is_granted('ROLE_USER')",
             denormalizationContext: [
-                'groups' => ['FailedQuestion:W$Create']
+                'groups' => ['FailedQuestion:W$Create'],
             ]
         ),
     ]
@@ -29,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class FailedQuestion implements CreatableByUserInterface
 {
     public const QUIZ_FAILED_QUESTIONS = 'quiz_failed_questions';
-    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -37,7 +38,10 @@ class FailedQuestion implements CreatableByUserInterface
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: Question::class)]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups(['FailedQuestion:V$List', 'FailedQuestion:W$Create'])]
+    #[Assert\NotNull]
+    #[Assert\Valid]
     private Question $question;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -66,6 +70,7 @@ class FailedQuestion implements CreatableByUserInterface
     public function setQuestion(Question $question): self
     {
         $this->question = $question;
+
         return $this;
     }
 

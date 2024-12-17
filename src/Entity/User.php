@@ -31,7 +31,7 @@ use function Symfony\Component\Clock\now;
             ]
         ),
         new Get(
-            security: "object == user",
+            security: 'object == user',
             uriTemplate: '/users/{id}',
             normalizationContext: [
                 'groups' => [
@@ -64,7 +64,7 @@ use function Symfony\Component\Clock\now;
         ),
         new Patch(
             uriTemplate: '/users/{id}',
-            security: "object == user",
+            security: 'object == user',
             denormalizationContext: [
                 'groups' => [
                     'User:W$MyUpdate',

@@ -9,7 +9,6 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\Enum\Category;
 use App\Interface\CreatableByUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -100,6 +99,9 @@ class Quiz implements CreatableByUserInterface
     ])]
     private ?string $remarks = null;
 
+    /**
+     * @var string[]
+     */
     #[ORM\Column(type: Types::JSON)]
     #[Groups([
         'Quiz:V$Detail',
@@ -173,15 +175,21 @@ class Quiz implements CreatableByUserInterface
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     public function getCategories(): array
     {
         return $this->categories;
     }
-    
+
+    /**
+     * @param string[] $categories
+     */
     public function setCategories(array $categories): self
     {
         $this->categories = $categories;
-    
+
         return $this;
     }
 
