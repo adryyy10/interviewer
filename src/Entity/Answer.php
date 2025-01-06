@@ -27,6 +27,7 @@ class Answer
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Annotation\Groups([
+        'FailedQuestion:V$List',
         'Question:V$List',
         'Quiz:W$Create',
     ])]
@@ -34,6 +35,7 @@ class Answer
 
     #[ORM\Column(type: Types::TEXT)]
     #[Annotation\Groups([
+        'FailedQuestion:V$List',
         'Question:V$AdminDetail',
         'Question:V$List',
         'Quiz:V$Detail',
@@ -45,6 +47,7 @@ class Answer
 
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Annotation\Groups([
+        'FailedQuestion:V$List',
         'Question:V$AdminDetail',
         'Question:V$List',
         'Quiz:V$Detail',
@@ -55,6 +58,7 @@ class Answer
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Annotation\Groups([
+        'FailedQuestion:V$List',
         'Question:V$AdminDetail',
         'Question:V$List',
         'Quiz:V$Detail',
