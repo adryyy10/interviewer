@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Interface\CreatableByUserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,6 +24,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: "is_granted('ROLE_USER')",
             denormalizationContext: [
                 'groups' => ['FailedQuestion:W$Create'],
+            ]
+        ),
+        new Patch(
+            security: "is_granted('ROLE_USER')",
+            denormalizationContext: [
+                'groups' => ['FailedQuestion:W$correctlyAnswered'],
             ]
         ),
     ]
@@ -51,6 +58,10 @@ class FailedQuestion implements CreatableByUserInterface
     #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['FailedQuestion:V$List'])]
     private \DateTimeImmutable $failedAt;
+
+    #[ORM\Column]
+    #[Groups(['FailedQuestion:W$correctlyAnswered'])]
+    private bool $isCorrectlyAnswered = false;
 
     public function __construct()
     {
@@ -89,5 +100,17 @@ class FailedQuestion implements CreatableByUserInterface
     public function getFailedAt(): \DateTimeImmutable
     {
         return $this->failedAt;
+    }
+
+    public function isCorrectlyAnswered(): bool
+    {
+        return $this->isCorrectlyAnswered;
+    }
+
+    public function setCorrectlyAnswered(bool $isCorrectlyAnswered): static
+    {
+        $this->isCorrectlyAnswered = $isCorrectlyAnswered;
+
+        return $this;
     }
 }

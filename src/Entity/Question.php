@@ -156,6 +156,7 @@ class Question implements CreatableByUserInterface
      */
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question', cascade: ['persist', 'remove'])]
     #[Annotation\Groups([
+        'FailedQuestion:V$List',
         'Question:V$AdminDetail',
         'Question:V$List',
         'Question:W$Create',

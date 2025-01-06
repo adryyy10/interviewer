@@ -36,6 +36,8 @@ class FailedQuestionExtension implements QueryCollectionExtensionInterface
             $rootAlias = $queryBuilder->getRootAliases()[0];
             $queryBuilder->andWhere(sprintf('%s.createdBy = :current_user', $rootAlias))
                          ->setParameter('current_user', $user);
+            $queryBuilder->andWhere(sprintf('%s.isCorrectlyAnswered = :notCorrectlyAnswered', $rootAlias))
+                         ->setParameter('notCorrectlyAnswered', false);
         }
     }
 }
