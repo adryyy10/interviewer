@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(
+            name: FailedQuestion::QUIZ_FAILED_QUESTIONS,
             security: "is_granted('ROLE_USER')",
             normalizationContext: [
                 'groups' => ['FailedQuestion:V$List'],
@@ -29,8 +30,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(
             security: "is_granted('ROLE_USER')",
             denormalizationContext: [
-                'groups' => ['FailedQuestion:W$correctlyAnswered'],
-            ]
+                'groups' => ['FailedQuestion:W$Update'],
+            ],
         ),
     ]
 )]
@@ -60,8 +61,8 @@ class FailedQuestion implements CreatableByUserInterface
     private \DateTimeImmutable $failedAt;
 
     #[ORM\Column]
-    #[Groups(['FailedQuestion:W$correctlyAnswered'])]
-    private bool $isCorrectlyAnswered = false;
+    #[Groups(['FailedQuestion:W$Update'])]
+    private bool $correctlyAnswered = false;
 
     public function __construct()
     {
@@ -104,12 +105,12 @@ class FailedQuestion implements CreatableByUserInterface
 
     public function isCorrectlyAnswered(): bool
     {
-        return $this->isCorrectlyAnswered;
+        return $this->correctlyAnswered;
     }
 
     public function setCorrectlyAnswered(bool $isCorrectlyAnswered): static
     {
-        $this->isCorrectlyAnswered = $isCorrectlyAnswered;
+        $this->correctlyAnswered = $isCorrectlyAnswered;
 
         return $this;
     }

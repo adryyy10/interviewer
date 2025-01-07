@@ -51,7 +51,7 @@ class FailedQuestionTest extends InterviewerTestCase
         ]);
 
         static::request('PATCH', $createdIri, json: [
-            'isCorrectlyAnswered' => true
+            'correctlyAnswered' => true
         ], headers: [
             'Content-Type' => 'application/merge-patch+json',
         ]);
@@ -61,7 +61,7 @@ class FailedQuestionTest extends InterviewerTestCase
         static::request('GET', '/failed_questions');
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
-            'hydra:member' => []
+            'hydra:totalItems' => 0,
         ]);
     }
 

@@ -89,6 +89,7 @@ class Question implements CreatableByUserInterface
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Annotation\Groups([
+        'FailedQuestion:V$List',
         'Question:V$AdminDetail',
         'Question:V$AdminList',
         'Question:V$List',
