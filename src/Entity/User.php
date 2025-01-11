@@ -174,6 +174,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Feedback::class, mappedBy: 'createdBy', cascade: ['remove'])]
     private Collection $feedbacks;
 
+    /**
+     * @var Collection<int, AccessToken>
+     */
+    #[ORM\OneToMany(targetEntity: AccessToken::class, mappedBy: 'user')]
+    private Collection $accessTokens;
+
     public function __construct()
     {
         $this->setCreatedAt(now());
@@ -181,6 +187,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->questions = new ArrayCollection();
         $this->quizzes = new ArrayCollection();
         $this->feedbacks = new ArrayCollection();
+        $this->accessTokens = new ArrayCollection();
     }
 
     public function getId(): int
@@ -313,5 +320,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getFeedback(): Collection
     {
         return $this->feedbacks;
+    }
+
+    /**
+     * @return Collection<int, AccessToken>
+     */
+    public function getAccessTokens(): Collection
+    {
+        return $this->accessTokens;
+    }
+
+    public function addAccessToken(AccessToken $accessToken): static
+    {
+        if (!$this->accessTokens->contains($accessToken)) {
+            $this->accessTokens->add($accessToken);
+            $accessToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessToken(AccessToken $accessToken): static
+    {
+        if ($this->accessTokens->removeElement($accessToken)) {
+            // set the owning side to null (unless already changed)
+            if ($accessToken->getUser() === $this) {
+                $accessToken->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

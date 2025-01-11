@@ -10,6 +10,11 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        oauth_lookup:
+            pattern: ^/oauth/lookup$
+            stateless: true
+            access_token:
+                token_handler: App\Security\AccessTokenHandler
         auth_lookup:
             pattern: ^/auth/lookup$
             stateless: true
