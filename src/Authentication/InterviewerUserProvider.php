@@ -27,25 +27,25 @@ final class InterviewerUserProvider implements UserProviderInterface
         $this->em = $em;
     }
 
-    public function loadUserByIdentifier(string $username): UserInterface
+    public function loadUserByIdentifier(string $email): UserInterface
     {
         $userRepo = $this->em->getRepository(User::class);
 
         // 1: AccountUser email address
         /** @var User|null $user */
-        $user = $userRepo->findOneBy(['email' => strtolower($username)]);
+        $user = $userRepo->findOneBy(['email' => strtolower($email)]);
         if ($user) {
             return $user;
         }
 
         // 2: AccountUser api key
         /** @var User|null $user */
-        $user = $userRepo->findOneBy(['apiKey' => $username]);
+        $user = $userRepo->findOneBy(['apiKey' => $email]);
         if ($user) {
             return $user;
         }
 
-        throw new UserNotFoundException(sprintf('User "%s" not found.', $username));
+        throw new UserNotFoundException(sprintf('User "%s" not found.', $email));
     }
 
     public function refreshUser(UserInterface $user): UserInterface

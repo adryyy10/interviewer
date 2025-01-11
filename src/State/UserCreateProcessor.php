@@ -4,6 +4,7 @@ namespace App\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Entity\AccessToken;
 use App\Entity\User;
 use App\Utils\RandomStringGenerator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,6 +32,12 @@ class UserCreateProcessor implements ProcessorInterface
         $user->setPassword($hashedPassword);
 
         $this->em->persist($user);
+
+        // Create also an AccessToken for this user
+        $accessToken = new AccessToken();
+        $accessToken->setUser($user);
+        $this->em->persist($accessToken);
+
         $this->em->flush();
 
         return $user;
