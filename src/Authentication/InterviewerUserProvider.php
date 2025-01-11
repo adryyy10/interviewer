@@ -29,6 +29,7 @@ final class InterviewerUserProvider implements UserProviderInterface
 
     public function loadUserByIdentifier(string $username): UserInterface
     {
+        dd("loadUserByIdentifier");
         $userRepo = $this->em->getRepository(User::class);
 
         // 1: AccountUser email address

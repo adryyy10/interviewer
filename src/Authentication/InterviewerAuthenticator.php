@@ -36,6 +36,7 @@ class InterviewerAuthenticator extends AbstractAuthenticator
     #[\Override]
     public function authenticate(Request $request): Passport
     {
+        dd("authenticator");
         $key = $this->extractKey($request);
 
         return new SelfValidatingPassport(
