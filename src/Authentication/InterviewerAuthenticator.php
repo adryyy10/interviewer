@@ -16,6 +16,8 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Google_Client;
+use Psr\Log\LoggerInterface;
 
 /**
  * Supports both AccountUsers (API key) and TokenUsers.
@@ -24,6 +26,7 @@ class InterviewerAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -36,12 +39,57 @@ class InterviewerAuthenticator extends AbstractAuthenticator
     #[\Override]
     public function authenticate(Request $request): Passport
     {
+        $authHeader = $request->headers->get('Authorization');
+        
+        if ($authHeader && str_starts_with($authHeader, 'Bearer ')) {
+            // Handle Google OAuth token
+            $googleToken = substr($authHeader, 7); // Remove 'Bearer ' prefix
+    
+            return new SelfValidatingPassport(
+                new UserBadge($googleToken, fn($token) => $this->loadUserFromGoogleToken($token))
+            );
+        }
+
         $key = $this->extractKey($request);
 
         return new SelfValidatingPassport(
             new UserBadge($key, $this->loadUserFromKey(...))
         );
     }
+
+    private function loadUserFromGoogleToken(string $token): ?UserInterface
+    {
+        $client = new Google_Client([
+            'client_id' => '823536902137-300ine10ao2cgu153dl4bd0f2m7qfntj.apps.googleusercontent.com',
+        ]);
+    
+        $payload = $client->verifyIdToken($token);
+    
+        if (!$payload) {
+            throw new AuthenticationException('Invalid Google token');
+        }
+    
+        $email = $payload['email'] ?? null;
+        $name = $payload['name'] ?? $email;
+    
+        if (!$email) {
+            throw new AuthenticationException('Email not found in token');
+        }
+    
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => strtolower($email)]);
+    
+        if (!$user) {
+            $user = new User();
+            $user->setEmail($email);
+            $user->setUsername($name);
+            $user->apiKey = bin2hex(random_bytes(16)); // Generate a random API key
+            $this->em->persist($user);
+            $this->em->flush();
+        }
+    
+        return $user;
+    }
+
 
     #[\Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -75,12 +123,12 @@ class InterviewerAuthenticator extends AbstractAuthenticator
 
     private function loadUserFromKey(string $key): ?UserInterface
     {
-        $accountUser = $this->em->getRepository(User::class)
-            ->findOneBy(['apiKey' => $key]);
-        if ($accountUser) {
-            return $accountUser;
+        $user = $this->em->getRepository(User::class)->findOneBy(['apiKey' => $key]);
+    
+        if (!$user) {
+            throw new AuthenticationException('Invalid API key');
         }
-
-        return null;
+    
+        return $user;
     }
 }

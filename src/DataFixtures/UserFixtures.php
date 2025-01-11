@@ -12,6 +12,7 @@ class UserFixtures extends Fixture
 {
     public const REF_ADMIN_ADRI = 'USER.REF_ADMIN_ADRI';
     public const REF_REGULAR_USER = 'USER.REF_REGULAR_USER';
+    public const REF_DEV_USER = 'USER.REF_DEV_USER';
 
     private UserPasswordHasherInterface $passwordHasher;
 
@@ -38,6 +39,14 @@ class UserFixtures extends Fixture
             password: '1234',
             isAdmin: false,
             apikey: 'thisisatestkey2',
+        ));
+
+        $this->addReference(self::REF_DEV_USER, $this->loadUser(
+            username: 'adridev',
+            email: 'adriafigueresgarciauk@gmail.com',
+            password: '1234',
+            isAdmin: false,
+            apikey: 'thisisatestkey3',
         ));
 
         $this->em->flush();
