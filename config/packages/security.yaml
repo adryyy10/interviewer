@@ -10,6 +10,9 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        oauth_lookup:
+            pattern: ^/oauth/lookup$
+            stateless: true
         auth_lookup:
             pattern: ^/auth/lookup$
             stateless: true
@@ -29,6 +32,7 @@ security:
     access_control:
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/questions, roles: PUBLIC_ACCESS }
+        - { path: ^/oauth/lookup, roles: PUBLIC_ACCESS }
         - { path: ^/signup, roles: PUBLIC_ACCESS }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
