@@ -29,7 +29,6 @@ class AuthController extends Controller
     #[Route('/lookup', methods: ['GET'])]
     public function lookupAction(): JsonResponse
     {
-        dd("auth controller");
         $user = $this->getUser();
 
         if (!($user instanceof User)) {
